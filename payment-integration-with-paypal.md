@@ -254,7 +254,7 @@ Stores transactions linked to bookings and payments.
 * `supplier_type` – hotel / airline
 * `booking_id` (FK → `booking.booking_id`)
 * `payment_method_id` (FK → `payment_method.payment_method_id`)
-* `amount`, `currency`
+* `original_amount`,`refunded_amount`, `currency`
 * `is_authorized`, `is_captured`
 * `transaction_reference`, `payment_reference`
 * `status` – initiated / pending / paid / failed / cancelled / refunded / partially\_refunded / expired
@@ -281,7 +281,7 @@ Tracks status history of transactions.
 
 * `transaction_status_log_id` (PK)
 * `transaction_id` (FK → `transaction.transaction_id`)
-* `status`
+* `status` – initiated / pending / paid / failed / cancelled / refunded / partially\_refunded / expired
 * `created_at`
 
 ---
@@ -293,7 +293,8 @@ Stores refund requests and processing info.
 * `refund_id` (PK)
 * `transaction_id` (FK → `transaction.transaction_id`)
 * `amount`
-* `reason`, `status`
+* `reason`
+* `status` - requested / pending / processed / failed / cancelled
 * `processed_at`, `created_at`
 
 ---
@@ -473,7 +474,8 @@ CREATE TABLE transaction (
     supplier_type VARCHAR(20) CHECK (supplier_type IN ('hotel','airline')),
     booking_id INT NOT NULL REFERENCES booking(booking_id),
     payment_method_id INT NOT NULL REFERENCES payment_method(payment_method_id),
-    amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0.00),
+    original_amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0.00),
+    refunded_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     currency VARCHAR(3) NOT NULL,
     is_authorized BOOLEAN DEFAULT FALSE,
     is_captured BOOLEAN DEFAULT FALSE,
@@ -510,7 +512,7 @@ CREATE TABLE refund (
     transaction_id INT NOT NULL REFERENCES transaction(transaction_id),
     amount DECIMAL(10,2) NOT NULL,
     reason TEXT,
-    status VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('requested','pending','processed','failed','cancelled')),
     processed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
