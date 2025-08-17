@@ -13,7 +13,7 @@ This repository contains comprehensive documentation for the **Payment Integrati
 5. [Pseudocode](#pseudocode)
 6. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
 7. [Data Model Description](#data-model-description)
-8. [SQL Scripts](#sql-scripts)
+8. [Database Schema (PostgreSQL Compatible)](#database-schema-postgresql-compatible)
 
 ---
 
