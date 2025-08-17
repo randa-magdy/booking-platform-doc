@@ -101,7 +101,200 @@ Enable customers to pay for hotel or flight bookings using PayPal in a secure, r
 
 ## Data Model Description
 
- **Will be added soon.**
+### `customer`
+
+Stores customer details for bookings.
+
+* `customer_id` (PK)
+* `customer_type` – guest / user
+* `first_name`, `last_name`, `email`, `phone_number`, `date_of_birth`, `gender`, `nationality`
+* `country_id`
+* `is_active`, `created_at`, `updated_at`
+
+---
+
+### `hotel`
+
+Stores hotel information and approval status.
+
+* `hotel_id` (PK)
+* `hotel_name`, `hotel_code`, `logo_url`
+* `location` (JSON), `geo_location` (GIS Point)
+* `email`, `phone`
+* `approval_status` – pending / approved / rejected
+* `is_active`, `deactivation_info`, `activation_info`
+* `total_rating`, `rating_count`, `average_rating`
+* `approved_at`, `rejected_at`
+* `created_at`, `updated_at`
+
+---
+
+### `hotel_room`
+
+Contains details of each room within a hotel.
+
+* `room_id` (PK)
+* `hotel_id` (FK → `hotel.hotel_id`)
+* `room_type`, `room_number`, `capacity` (number of guests)
+* `price_per_night`, `currency`
+* `is_available`, `created_at`, `updated_at`
+
+---
+
+### `airlines`
+
+Stores airline information.
+
+* `airline_id` (PK)
+* `airline_name`, `airline_code` (IATA, unique)
+* `logo_url`, `country_code`
+* `is_active`, `created_at`, `updated_at`
+
+---
+
+### `flight`
+
+Stores flight information.
+
+* `flight_id` (PK)
+* `airline_id` (FK → `airlines.airline_id`)
+* `flight_number` (unique)
+* `departure_airport`, `arrival_airport` (IATA code)
+* `departure_time`, `arrival_time`
+* `seat_capacity` – total seats available
+* `booked_seats` – number of booked seats excluding lap infants
+* `base_price`, `currency`
+* `status` – scheduled / delayed / cancelled / completed
+* `created_at`, `updated_at`
+
+> **Note:** Only `adult` and `child` count toward `booked_seats`.
+
+---
+
+### `booking`
+
+Represents a booking (hotel or flight).
+
+* `booking_id` (PK)
+* `confirmation_number`, `pin_code`
+* `customer_id` (FK → `customer.customer_id`)
+* `booking_reference`
+* `booking_type` – hotel / flight
+* `booking_status` – pending / confirmed / cancelled / completed / refunded
+* `subtotal`, `tax_amount`, `service_fee`, `discount_amount`, `total_amount`
+* `currency`
+* `confirmation_info` (JSON), `cancellation_info` (JSON)
+* `created_at`, `updated_at`
+
+---
+
+### `hotel_booking`
+
+Details of hotel-specific bookings.
+
+* `hotel_booking_id` (PK)
+* `booking_id` (FK → `booking.booking_id`, unique)
+* `hotel_id` (FK → `hotel.hotel_id`)
+* `room_id` (FK → `hotel_rooms.room_id`)
+* `check_in_date`, `check_out_date`, `nights`
+* `payment_option` – pay\_at\_property / scheduled / immediate
+* `payment_due_date`
+
+---
+
+### `flight_booking`
+
+Details of flight-specific bookings.
+
+* `flight_booking_id` (PK)
+* `booking_id` (FK → `booking.booking_id`)
+* `flight_id` (FK → `flight.flight_id`)
+* `passenger_type` – adult / child / infant
+* `seat_class` – economy / premium\_economy / business / first
+* `seat_number`
+* `ticket_type` – standard / flexible
+* `ticket_price`
+* `passenger_title`, `passenger_first_name`, `passenger_last_name`
+* `passenger_date_of_birth`
+* `document_number`, `document_expiry`, `document_issue_country`
+* `nationality`
+* `created_at`, `updated_at`
+
+---
+
+### `payment_method`
+
+Supported payment methods (PayPal, credit card, etc.).
+
+* `payment_method_id` (PK)
+* `method_name`, `description`, `icon_url`
+* `is_active`, `is_default`
+* `created_at`, `updated_at`
+
+---
+
+### `payment_gateway`
+
+Stores third-party gateway configurations.
+
+* `gateway_id` (PK)
+* `payment_method_id` (FK → `payment_method.payment_method_id`)
+* `gateway_config` (JSONB)
+* `created_at`, `updated_at`
+
+---
+
+### `transaction`
+
+Stores transactions linked to bookings and payments.
+
+* `transaction_id` (PK)
+* `customer_id` (FK → `customer.customer_id`)
+* `supplier_id` – hotel\_id or airline\_id
+* `supplier_type` – hotel / airline
+* `booking_id` (FK → `booking.booking_id`)
+* `payment_method_id` (FK → `payment_method.payment_method_id`)
+* `amount`, `currency`
+* `is_authorized`, `is_captured`
+* `transaction_reference`, `payment_reference`
+* `status` – initiated / pending / paid / failed / cancelled / refunded / partially\_refunded / expired
+* `created_at`, `updated_at`
+
+---
+
+### `transaction_detail`
+
+Logs request/response data per transaction.
+
+* `transaction_detail_id` (PK)
+* `transaction_id` (FK → `transaction.transaction_id`)
+* `gateway_id`
+* `action`
+* `request_payload` (JSONB), `response_payload` (JSONB), `error_stack` (JSONB)
+* `created_at`
+
+---
+
+### `transaction_status_log`
+
+Tracks status history of transactions.
+
+* `transaction_status_log_id` (PK)
+* `transaction_id` (FK → `transaction.transaction_id`)
+* `status`
+* `created_at`
+
+---
+
+### `refund`
+
+Stores refund requests and processing info.
+
+* `refund_id` (PK)
+* `transaction_id` (FK → `transaction.transaction_id`)
+* `amount`
+* `reason`, `status`
+* `processed_at`, `created_at`
 
 ---
 
