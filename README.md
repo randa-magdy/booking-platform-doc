@@ -26,35 +26,16 @@ Please refer to [Features and Functionalities Document](./features-documentation
 ## Use Case Model for the System 
 
 ### `Actors of the System` 
-1. **Customer (Guest / User)**
+Perfect 👍 Here’s the **extended UML-style Actor Table** with an additional column **Interactions with System**, linking each actor to the main modules/use cases they interact with:
 
-   * Books hotels or flights.
-   * Manages bookings, payments, cancellations, and refunds.
-
-2. **Hotel Supplier**
-
-   * Manages hotel listings, room availability, pricing.
-   * Handles booking confirmations, modifications, and cancellations.
-
-3. **Airline Supplier**
-
-   * Provides flight schedules, seat availability, and fares.
-   * Confirms or rejects flight bookings.
-
-4. **Payment Provider (e.g., PayPal, Visa, Mastercard, Apple Pay)**
-
-   * Handles online payment authorization, capture, refunds.
-
-5. **Administrator (Platform Admin)**
-
-   * Manages users, suppliers, listings, disputes, promotions, refunds.
-   * Ensures compliance (licenses, policies, fraud prevention).
-     
-6. **Customer Service** 
-
-   * Assists customers with booking issues, cancellations, and refunds.
-   * Assists suppliers with registration, listing issues, availability updates, settlement disputes.
-   * Resolving conflicts between customer and supplier.
+| **Actor**                                                        | **Description**                                                                        | **Responsibilities**                                                                                                                                                                                                                                                                                         | **Interactions with System**                                                                                                                                             |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Customer (Guest / User)**                                      | End-user of the platform who books hotels or flights. Can be a traveler or local user. | - Search and book hotels/flights<br>- Manage bookings (view, modify, cancel)<br>- Make payments and request refunds<br>- Submit ratings/reviews<br>- Manage personal profile, preferences, and account settings                                                                                              | - **User Registration & Authentication**<br>- **Search & Filter**<br>- **Booking**<br>- **Notification**<br>- **Customer Management**<br>- **Payment Integration**       |
+| **Hotel Supplier**                                               | Hotel owner/manager who provides room inventory and manages hotel-related services.    | - Manage hotel property listings, room types, amenities, images, pricing<br>- Update availability, promotions, discounts<br>- Handle booking confirmations, modifications, and cancellations<br>- Manage settlement reports and financial reconciliation<br>- Respond to customer reviews and inquiries      | - **Booking** (Confirm/Cancel/Modify)<br>- **Customer Management** (Reviews, Support)<br>- **Dashboard & Reporting** (Reconciliation)                                    |
+| **Airline Supplier**                                             | Airline company providing flight schedules, fares, and seat inventory.                 | - Provide flight schedules, seat availability, and fares<br>- Confirm or reject booking requests<br>- Update flight status (delays, cancellations)<br>- Manage settlement and reconciliation<br>- Define fare rules, baggage policies, and refund rules                                                      | - **Booking** (Confirm/Cancel Flights)<br>- **Customer Management** (Rules, Baggage)<br>- **Dashboard & Reporting** (Settlement)                                         |
+| **Payment Provider (PayPal, Visa, Mastercard, Apple Pay, etc.)** | External service provider that processes customer payments.                            | - Handle payment authorization, capture, settlement, and refunds<br>- Provide transaction receipts and status updates<br>- Support fraud detection and dispute management<br>- Enable multi-currency and various payment methods                                                                             | - **Payment Integration** (Authorization, Capture, Refund)<br>- **Dashboard & Reporting** (Transaction Records)                                                          |
+| **Administrator (Platform Admin)**                               | Internal role managing overall system operations and compliance.                       | - Manage customers, suppliers, and internal users<br>- Oversee listings, disputes, promotions, and refunds<br>- Ensure compliance with licenses, policies, and legal requirements<br>- Monitor financial reports and fraud prevention<br>- Generate dashboards and analytics reports                         | - **Dashboard & Reporting**<br>- **Customer Management**<br>- **User Registration & Authentication**<br>- **Booking** (Disputes)<br>- **Payment Integration** (Auditing) |
+| **Customer Service**                                             | Support role assisting customers and suppliers with issues.                            | - Help customers with booking, payment, cancellation, and refund issues<br>- Support suppliers with registration, listing setup, availability, pricing<br>- Resolve disputes between customers and suppliers<br>- Provide live chat, email, and phone support<br>- Escalate complex issues to administrators | - **Customer Management** (Support, Chat)<br>- **Booking** (Disputes)<br>- **Notification** (Updates to Users)<br>- **Dashboard & Reporting** (Escalation Reports)       |
 
 ---
 
