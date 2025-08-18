@@ -77,13 +77,13 @@ Enable customers to pay for hotel or flight bookings using PayPal in a secure, r
 
 ## Flowchart Diagram
 
-![Place Order Flowchart](./diagrams/payment-integration-flowchart.png)
+![Paymeny Integration Flowchart](./diagrams/payment-integration-flowchart.png)
 
 ---
 
 ## Sequence Diagram
 
-![FDS Sequence Diagram](./diagrams/payment-integration-sequence-diagram.png) 
+![Paymeny Integration Sequence Diagram](./diagrams/payment-integration-sequence-diagram.png) 
 
 ---
 
@@ -95,7 +95,7 @@ Enable customers to pay for hotel or flight bookings using PayPal in a secure, r
 
 ## Entity Relationship Diagram (ERD)
 
- **Will be added soon.**
+ ![Paymeny Integration ERD Diagram](./diagrams/payment-integration-erd.png) 
 
 ---
 
