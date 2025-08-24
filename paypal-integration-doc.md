@@ -1,12 +1,21 @@
 # **Payment Integration with PayPal - Documentation**
 
+This document describes the integration of **PayPal payment** in the booking platform for hotel and flight reservations. It explains how payments are processed, tracked, and recorded using the **Strategy design pattern** to support multiple providers in the future.
+
+The documentation includes:
+
+* Overview of payment flows
+* Detailed use case scenarios
+* Pseudocode examples
+* Entity Relationship Diagram (ERD)
+* Database models and PostgreSQL-compatible schema
+  
 ---
 
 ## **Table of Contents**
 
-1. [Introduction](#introduction)
-2. [Overview](#overview)
-3. [Use Case Flows](#use-case-flows)
+1. [Overview](#overview)
+2. [Use Case Flows](#use-case-flows)
 
    * [Actors](#actors)
    * [Flow Cases](#flow-cases)
@@ -17,24 +26,10 @@
      * [4. Payment Authorized but Not Captured](#4-payment-authorized-but-not-captured)
      * [5. Refund After Successful Payment](#5-refund-after-successful-payment)
      * [6. User Abandons Payment](#6-user-abandons-payment)
-4. [Pseudocode](#pseudocode)
-5. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
-6. [Data Model Description](#data-model-description)
-7. [Database Schema (PostgreSQL Compatible)](#database-schema-postgresql-compatible)
-
----
-
-## **Introduction**
-
-This document describes the integration of **PayPal payment** in the booking platform for hotel and flight reservations. It explains how payments are processed, tracked, and recorded using the **Strategy design pattern** to support multiple providers in the future.
-
-The documentation includes:
-
-* Overview of payment flows
-* Detailed use case scenarios
-* Pseudocode examples
-* Entity Relationship Diagram (ERD)
-* Database models and PostgreSQL-compatible schema
+3. [Pseudocode](#pseudocode)
+4. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
+5. [Data Model Description](#data-model-description)
+6. [Database Schema (PostgreSQL Compatible)](#database-schema-postgresql-compatible)
 
 ---
 
