@@ -86,7 +86,9 @@ The payment integration supports:
 
 ### **Payment Use Case Flows :**
 
-### ##**1. Payment Completed Successfully**
+![Payment Integration Flowchart](./diagrams/payment-flows-flowchart.png)
+
+### **1. Payment Completed Successfully**
 
 **Goal:** Complete the payment and confirm booking.
 
@@ -109,7 +111,7 @@ The payment integration supports:
 
 **Postcondition:** Transaction = COMPLETED, Booking = CONFIRMED
 
-___
+
 
 #### **2. Payment Failed**
 
@@ -129,7 +131,7 @@ ___
 
 **Postcondition:** Transaction = FAILED, Booking = FAILED
 
----
+
 
 #### **3. Payment Cancelled by User**
 
@@ -149,7 +151,7 @@ ___
 
 **Postcondition:** Transaction = CANCELLED\_BY\_USER, Booking = CANCELLED
 
----
+
 
 #### **4. Payment Authorized but Not Captured**
 
@@ -174,7 +176,7 @@ ___
 
 **Postcondition:** Transaction = AUTHORIZED or COMPLETED, Booking = AUTHORIZED or CONFIRMED
 
----
+
 
 #### **5. Refund Flow**
 
@@ -193,7 +195,7 @@ ___
 
 **Postcondition:** Transaction = REFUNDED, Booking = REFUNDED
 
----
+
 
 #### **6. User Abandons Payment**
 
