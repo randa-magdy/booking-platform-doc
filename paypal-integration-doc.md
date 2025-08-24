@@ -113,7 +113,7 @@ The payment integration supports:
 
 
 
-#### **2. Payment Failed**
+### **2. Payment Failed**
 
 **Goal:** Handle declined payment.
 
@@ -133,7 +133,7 @@ The payment integration supports:
 
 
 
-#### **3. Payment Cancelled by User**
+### **3. Payment Cancelled by User**
 
 **Goal:** Handle user cancellation during PayPal checkout.
 
@@ -153,7 +153,7 @@ The payment integration supports:
 
 
 
-#### **4. Payment Authorized but Not Captured**
+### **4. Payment Authorized but Not Captured**
 
 **Goal:** Authorize payment first, capture later.
 
@@ -178,7 +178,7 @@ The payment integration supports:
 
 
 
-#### **5. Refund Flow**
+### **5. Refund Flow**
 
 **Goal:** Refund payment after cancellation.
 
@@ -197,7 +197,7 @@ The payment integration supports:
 
 
 
-#### **6. User Abandons Payment**
+### **6. User Abandons Payment**
 
 **Goal:** Handle the scenario where the user starts the payment but leaves the checkout without completing it.
 
