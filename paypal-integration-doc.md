@@ -89,7 +89,9 @@ The payment integration supports:
 #### **1. Payment Completed Successfully**
 
 **Goal:** Complete the payment and confirm booking.
+
 **Precondition:** User has a valid booking and chooses PayPal.
+
 **Flow Steps:**
 
 1. User clicks "Pay with PayPal".
@@ -112,7 +114,9 @@ The payment integration supports:
 #### **2. Payment Failed**
 
 **Goal:** Handle declined payment.
+
 **Precondition:** User attempts payment with insufficient funds or invalid card.
+
 **Flow Steps:**
 
 1. User clicks "Pay with PayPal".
@@ -130,7 +134,9 @@ The payment integration supports:
 #### **3. Payment Cancelled by User**
 
 **Goal:** Handle user cancellation during PayPal checkout.
+
 **Precondition:** User initiates payment.
+
 **Flow Steps:**
 
 1. User clicks "Pay with PayPal".
@@ -148,7 +154,9 @@ The payment integration supports:
 #### **4. Payment Authorized but Not Captured**
 
 **Goal:** Authorize payment first, capture later.
+
 **Precondition:** Merchant uses delayed capture (e.g., hotel pre-check-in).
+
 **Flow Steps:**
 
 1. User clicks "Pay with PayPal".
@@ -171,7 +179,9 @@ The payment integration supports:
 #### **5. Refund Flow**
 
 **Goal:** Refund payment after cancellation.
+
 **Precondition:** Booking already paid and eligible for refund.
+
 **Flow Steps:**
 
 1. User requests refund via frontend.
