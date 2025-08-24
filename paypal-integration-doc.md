@@ -86,7 +86,7 @@ The payment integration supports:
 
 ### **Payment Use Case Flows :**
 
-### ## **1. Payment Completed Successfully**
+### ##**1. Payment Completed Successfully**
 
 **Goal:** Complete the payment and confirm booking.
 
