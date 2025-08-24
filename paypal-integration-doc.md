@@ -82,6 +82,7 @@ The payment integration supports:
   * Ensures consistency between booking lifecycle and payment lifecycle
 
 
+
 ### **Payment Flow Scenarios :**
 
 ![Payment Integration Flowchart](./diagrams/payment-flows-flowchart.png)
