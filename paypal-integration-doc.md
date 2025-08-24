@@ -82,11 +82,11 @@ The payment integration supports:
   * Stores refund requests and results
   * Ensures consistency between booking lifecycle and payment lifecycle
 
-***
+---
 
 ### **Flow Cases**
 
-#### **1. Payment Completed Successfully**
+#### ** Case 1. Payment Completed Successfully**
 
 **Goal:** Complete the payment and confirm booking.
 
@@ -111,7 +111,7 @@ The payment integration supports:
 
 ___
 
-#### **2. Payment Failed**
+#### **Case 2. Payment Failed**
 
 **Goal:** Handle declined payment.
 
@@ -131,7 +131,7 @@ ___
 
 ---
 
-#### **3. Payment Cancelled by User**
+#### **Case 3. Payment Cancelled by User**
 
 **Goal:** Handle user cancellation during PayPal checkout.
 
@@ -151,7 +151,7 @@ ___
 
 ---
 
-#### **4. Payment Authorized but Not Captured**
+#### **Case 4. Payment Authorized but Not Captured**
 
 **Goal:** Authorize payment first, capture later.
 
@@ -176,7 +176,7 @@ ___
 
 ---
 
-#### **5. Refund Flow**
+#### **Case 5. Refund Flow**
 
 **Goal:** Refund payment after cancellation.
 
@@ -195,7 +195,7 @@ ___
 
 ---
 
-#### **6. User Abandons Payment**
+#### **Case 6. User Abandons Payment**
 
 **Goal:** Handle the scenario where the user starts the payment but leaves the checkout without completing it.
 
