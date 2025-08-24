@@ -82,7 +82,7 @@ The payment integration supports:
   * Stores refund requests and results
   * Ensures consistency between booking lifecycle and payment lifecycle
 
----
+***
 
 ### **Flow Cases**
 
@@ -109,7 +109,7 @@ The payment integration supports:
 
 **Postcondition:** Transaction = COMPLETED, Booking = CONFIRMED
 
----
+___
 
 #### **2. Payment Failed**
 
