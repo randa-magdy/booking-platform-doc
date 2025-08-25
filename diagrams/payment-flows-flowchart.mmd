@@ -3,88 +3,66 @@ config:
   theme: base
 ---
 flowchart TD
-    %% User Starts Payment
-    A@{ label: "User clicks 'Pay with PayPal'" } --> B["Frontend calls /payments/process"]
+    A@{ label: "User clicks 'Pay with PayPal'" } --> B["Frontend calls POST /payments/process"]
     B --> C["Backend creates booking: PENDING_PAYMENT"]
     C --> D["DB: Save transaction status=PENDING"]
-
-    %% Authentication with PayPal
     D --> BA["Backend requests PayPal OAuth Token"]
     BA --> BB["PayPal returns access_token"]
-
-    %% Create Order in PayPal
-    BB --> E["Backend calls PayPal /orders API with access_token"]
+    BB --> E["Backend calls PayPal POST /v2/checkout/orders with access_token"]
     E --> F["PayPal returns order_id + approval_url"]
     F --> G["DB: Update transaction with order_id, approval_url"]
     G --> H["Frontend redirects User to PayPal UI"]
-
-    %% User Action
     H --> I{"User Action?"}
-    I -- Approve --> J["PayPal processes payment"]
+    I -- Approve --> J["PayPal processes payment approval"]
     I -- Cancel --> K["PayPal redirects to cancelUrl"]
     I -- Abandon/Timeout --> L1["DB: Update transaction=ABANDONED"]
     L1 --> M1["DB: Booking status=PAYMENT_TIMEOUT"]
     M1 --> N1["Notify User: Payment not completed"]
-
-    %% Cancelled Flow
     K --> L["DB: Update transaction=CANCELLED_BY_USER"]
     L --> M["DB: Booking status=CANCELLED"]
     M --> N["Notify User: Payment Cancelled"]
-
-    %% Payment Intent (Capture or Authorize)
     J --> O{"Payment Intent?"}
-    O -- CAPTURE --> P["PayPal triggers Capture Webhook"]
+    O -- CAPTURE --> PC["Frontend returns to successUrl (Processing screen)"]
+    PC --> PFE["Frontend calls POST /api/payments/{order_id}/capture"]
+    PFE --> PD["Backend calls POST /v2/checkout/orders/{id}/capture"]
+    PD --> PE{"Capture Result?"}
+    PE -- Success --> PF["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
+    PE -- Failed --> PG["DB: Transaction=FAILED<br>Booking=FAILED"]
+    PF --> PWH["PayPal also sends Capture Webhook (async)"] & U["Notify User: Booking Confirmed"]
+    PWH --> PV["Backend verifies webhook signature"]
+    PV --> PWF["Reconcile DB (idempotent update if already COMPLETED)"]
+    PG --> V["Notify User: Payment Failed"]
     O -- AUTHORIZE --> Q["PayPal triggers Authorization Webhook"]
-
-    %% Webhook Verification for Capture
-    P --> PV["Backend verifies Capture Webhook Signature"]
-    PV --> R{"Capture Status?"}
-
-    %% Capture Result
-    R -- Completed --> S["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
-    R -- Failed/Denied --> T["DB: Transaction=FAILED<br>Booking=FAILED"]
-
-    S --> U["Notify User: Booking Confirmed"] & AF{"User Requests Refund?"}
-    T --> V["Notify User: Payment Failed"]
-
-    %% Authorization Webhook
     Q --> QV["Backend verifies Authorization Webhook Signature"]
     QV --> W["DB: Transaction=AUTHORIZED<br>Booking=AUTHORIZED"]
     W --> X["Notify User: Booking Authorized"]
-
-    %% Merchant Capture from Authorization
     X --> Y{"Merchant Captures Later?"}
-    Y -- Yes --> Z["PayPal triggers Capture Webhook"]
-    Z --> ZV["Backend verifies Capture Webhook Signature"]
-    ZV --> AB["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
-    AB --> AC["Notify User: Booking Confirmed"]
-
-    %% Authorization Expired Webhook
+    Y -- Yes --> Z["Backend calls PayPal POST /v2/payments/authorizations/{id}/capture"]
+    Z --> ZV["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
+    ZV --> AC["Notify User: Booking Confirmed"]
     Y -- No --> AA["PayPal triggers Authorization Expired Webhook"]
     AA --> AAV["Backend verifies Expired Webhook Signature"]
     AAV --> AD["DB: Transaction=EXPIRED<br>Booking=EXPIRED_AUTHORIZATION"]
     AD --> AE["Notify User: Authorization Expired"]
-
-    %% Refund Flow
-    AF -- Yes --> AG["Backend calls PayPal Refund API"]
+    U --> AF{"User Requests Refund?"}
+    AC --> AF
+    AF -- Yes --> AG["Backend calls PayPal Refund API <br> POST /v2/payments/captures/{capture_id}/refund"]
     AG --> AH["DB: Create Refund Record=PENDING"]
     AH --> AI["PayPal triggers Refund Webhook"]
     AI --> AIV["Backend verifies Refund Webhook Signature"]
-    AIV --> AJ["DB: Refund=COMPLETED<br>Transaction=PARTIALLY_REFUNDED or FULLY_REFUNDED<br>Booking=REFUNDED"]
+    AIV --> AJ["DB: Refund=COMPLETED<br>Transaction=PARTIALLY_REFUNDED or REFUNDED<br>Booking=REFUNDED"]
     AJ --> AK["Notify User: Refund Processed"]
     AF -- No --> AL["End of Payment Cycle"]
-
-    %% Style
     style A fill:#FFCDD2
     style I fill:#FFE0B2
-    style N fill:#FFCDD2
     style N1 fill:#FFCDD2
+    style N fill:#FFCDD2
     style O fill:#FFE0B2
-    style R fill:#FFE0B2
-    style U fill:#FFCDD2
-    style AF fill:#FFE0B2
+    style PE fill:#FFE0B2
+    style PWF fill:#FFCDD2
+    style V fill:#FFCDD2
     style Y fill:#FFE0B2
-    style AC fill:#FFCDD2
     style AE fill:#FFCDD2
+    style AF fill:#FFE0B2
     style AK fill:#FFCDD2
     style AL fill:#FFCDD2
