@@ -114,7 +114,7 @@ The payment integration supports:
 **Postcondition:** The Transaction is `COMPLETED` and the Booking is `CONFIRMED`.
 
 **Sequence diagram:**
-(./diagrams/payment-success-case.png)
+![Payment Success Case ](./diagrams/payment-success-case.png)
 
 ---
 
@@ -143,6 +143,9 @@ The payment integration supports:
 
 **Postcondition:** The Transaction is `FAILED` and the Booking is `FAILED`.
 
+**Sequence diagram:**
+![Payment Failed Case ](./diagrams/payment-failed-case.png)
+
 ---
 
 ### **3. Payment Cancelled by User**
@@ -170,6 +173,9 @@ The payment integration supports:
 15. The frontend displays a message to the user: "Your payment was cancelled."
 
 **Postcondition:** The Transaction is `CANCELLED` and the Booking is `CANCELLED`.
+
+**Sequence diagram:**
+![Payment Cancelled Case ](./diagrams/payment-cancelled-by-user.png)
 
 ---
 
@@ -200,6 +206,9 @@ The payment integration supports:
 
 **Postcondition:** The system holds an authorized payment that transitions to `COMPLETED` or `EXPIRED`.
 
+**Sequence diagram:**
+![Payment Delayed Capture Case](./diagrams/payment-authorized-later-capture-case.png)
+
 ---
 
 ### **5. Refund Flow**
@@ -223,6 +232,9 @@ The payment integration supports:
 8.  The frontend updates to show a confirmation that the refund has been processed.
 
 **Postcondition:** The Transaction is `REFUNDED`, the Booking is `REFUNDED`, and funds are returned.
+
+**Sequence diagram:**
+![Payment Refund Case ](./diagrams/payment-refund-case.png)
 
 ---
 
@@ -251,8 +263,9 @@ The payment integration supports:
 13. This action may also release any reserved inventory associated with the booking.
 14. If the user returns to the application, the frontend will display a message indicating the payment session timed out.
 
----
-
-
-
 **Postcondition:** The Transaction is `ABANDONED` and the Booking is `PAYMENT_TIMEOUT`. System resources are cleaned up.
+
+**Sequence diagram:**
+![Payment Abandoned Case ](./diagrams/payment-abandoned-case.png)
+
+
