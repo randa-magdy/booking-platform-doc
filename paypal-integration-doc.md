@@ -113,6 +113,9 @@ The payment integration supports:
 
 **Postcondition:** The Transaction is `COMPLETED` and the Booking is `CONFIRMED`.
 
+**Sequence diagram:**
+(./diagrams/payment-success-case.png)
+
 ---
 
 ### **2. Payment Failed (Declined by PayPal)**
