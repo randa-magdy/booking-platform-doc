@@ -96,20 +96,23 @@ The payment integration supports:
 
 **Detailed Flow:**
 
-1.  The user clicks the **“Pay with PayPal”** button on the checkout page.
-2.  The frontend application sends a request to the backend API endpoint `POST /api/payments/process`, containing the booking ID.
-3.  The backend server updates the **Booking** status to `PENDING_PAYMENT` and creates a new **Transaction** record with a status of `PENDING`.
-4.  The backend authenticates with PayPal by calling `POST /v1/oauth2/token` using the merchant's Client ID and Secret to obtain an `access_token`.
-5.  Using this token, the backend calls the PayPal `POST /v2/checkout/orders` API with `intent: "CAPTURE"`, including amount, currency, and `redirect_urls`.
-6.  PayPal responds with a `201 Created` status, a PayPal `order_id`, and an `approval_url`.
-7.  The backend stores this `order_id` and `approval_url` against the Transaction record.
-8.  The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
-9.  The user logs into PayPal and confirms the payment on PayPal's page.
-10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`).
-11. **In parallel**, PayPal sends an asynchronous `PAYMENT.CAPTURE.COMPLETED` webhook event to the backend's webhook listener (`POST /api/webhooks/paypal`).
-12. The backend receives the webhook, verifies its cryptographic signature to confirm it's from PayPal, and extracts the details.
-13. The backend updates the **Transaction** status to `COMPLETED` and the **Booking** status to `CONFIRMED`.
-14. The frontend, now on the `returnUrl`, polls the backend or receives a notification. Upon detecting the `CONFIRMED` status, it displays a booking confirmation page.
+1. The user clicks the **“Pay with PayPal”** button on the checkout page.
+2. The frontend application sends a request to the backend API endpoint `POST /api/payments/process`, containing the booking ID.
+3. The backend server updates the **Booking** status to `PENDING_PAYMENT` and creates a new **Transaction** record with a status of `PENDING`.
+4. The backend authenticates with PayPal by calling `POST /v1/oauth2/token` using the merchant's Client ID and Secret to obtain an `access_token`.
+5. Using this token, the backend calls the PayPal `POST /v2/checkout/orders` API with `intent: "CAPTURE"`, including amount, currency, and `redirect_urls`.
+6. PayPal responds with a `201 Created` status, a PayPal `order_id`, and an `approval_url`.
+7. The backend stores this `order_id` and `approval_url` against the Transaction record.
+8. The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
+9. The user logs into PayPal and confirms the payment on PayPal's page.
+10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`) along with the `order_id`.
+11. The frontend calls the backend API endpoint `POST /api/payments/{order_id}/capture`.
+12. The backend, using the stored `order_id` and access token, calls PayPal’s `POST /v2/checkout/orders/{order_id}/capture` endpoint to finalize the payment.
+13. PayPal responds with a `201 Created` and the capture details (including `capture_id`, status, and amount).
+14. The backend updates the **Transaction** status to `COMPLETED` and the **Booking** status to `CONFIRMED`.
+15. **In parallel**, PayPal also sends an asynchronous `PAYMENT.CAPTURE.COMPLETED` webhook event to the backend’s webhook listener (`POST /api/webhooks/paypal`).
+16. The backend receives the webhook, verifies its cryptographic signature to confirm it’s from PayPal, and reconciles it against the transaction record for extra reliability.
+17. The frontend, now on the `returnUrl`, polls the backend or receives a push notification. Upon detecting the `CONFIRMED` status, it displays a booking confirmation page.
 
 **Postcondition:** The Transaction is `COMPLETED` and the Booking is `CONFIRMED`.
 
@@ -134,12 +137,16 @@ The payment integration supports:
 6.  PayPal responds with a `201 Created` status, a PayPal `order_id`, and an `approval_url`.
 7.  The backend stores this `order_id` and `approval_url` against the Transaction record.
 8.  The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
-9.  The user attempts to pay on the PayPal page, but PayPal's systems decline the transaction (e.g., due to insufficient funds).
-10.  PayPal sends a `PAYMENT.CAPTURE.DENIED` webhook event to the backend's webhook listener.
-11. The backend processes the webhook, finds the associated Transaction and Booking using the `order_id`, and updates their statuses.
-12. The **Transaction** status is set to `FAILED`.
-13. The associated **Booking** status is set to `FAILED`.
-14. The frontend, which may be on a generic pending page, fetches the status and displays a "Payment failed. Please try a different method." error.
+9.  The user logs into PayPal and confirms the payment on PayPal's page.
+10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`) along with the `order_id`.
+11. The frontend calls the backend API endpoint `POST /api/payments/{order_id}/capture`.
+12. The backend, using the stored `order_id` and access token, calls PayPal’s `POST /v2/checkout/orders/{order_id}/capture` endpoint to finalize the payment.
+13. PayPal's systems decline the transaction (e.g., due to insufficient funds).
+14. PayPal sends a `PAYMENT.CAPTURE.DENIED` webhook event to the backend's webhook listener.
+15. The backend processes the webhook, finds the associated Transaction and Booking using the `order_id`, and updates their statuses.
+16. The **Transaction** status is set to `FAILED`.
+17. The associated **Booking** status is set to `FAILED`.
+18. The frontend, which may be on a generic pending page, fetches the status and displays a "Payment failed. Please try a different method." error.
 
 **Postcondition:** The Transaction is `FAILED` and the Booking is `FAILED`.
 
