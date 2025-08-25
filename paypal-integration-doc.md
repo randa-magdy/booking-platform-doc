@@ -162,11 +162,11 @@ The payment integration supports:
 10.  PayPal redirects the user's browser to the configured `cancelUrl` (e.g., `https://example.com/payment/cancelled`).
 11.  The page at the `cancelUrl` triggers logic to inform the backend of the cancellation, typically by calling an API like `POST /api/payments/{orderId}/cancel`.
 12. The backend server receives this API call, finds the relevant Transaction and Booking, and updates them to reflect the user's choice.
-13. The **Transaction** status is set to `CANCELLED_BY_USER`.
+13. The **Transaction** status is set to `CANCELLED`.
 14. The associated **Booking** status is set to `CANCELLED`.
 15. The frontend displays a message to the user: "Your payment was cancelled."
 
-**Postcondition:** The Transaction is `CANCELLED_BY_USER` and the Booking is `CANCELLED`.
+**Postcondition:** The Transaction is `CANCELLED` and the Booking is `CANCELLED`.
 
 ---
 
