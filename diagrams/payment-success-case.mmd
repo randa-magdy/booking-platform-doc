@@ -1,0 +1,52 @@
+sequenceDiagram
+    participant FE as Frontend
+    participant BE as Backend
+    participant PP as PayPal
+    participant DB as Database
+    
+    Note over FE: User clicks "Pay with PayPal"
+    
+    %% Phase 1: Payment Request
+    FE->>+BE: POST /payments/process<br/>{provider: "paypal", amount: 150, bookingId: "123"}
+    BE->>+DB: Create transaction {status: "pending", amount: 150}
+    DB->>-BE: Transaction created {id: "txn_456"}
+    
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: Return access_token
+    
+    BE->>+PP: POST /v2/checkout/orders
+    PP->>-BE: Return {order_id, approval_url}
+    
+    BE->>+DB: Update transaction {paypal_order_id: "order_789"}
+    DB->>-BE: Transaction updated
+    
+    BE->>-FE: {redirectUrl, transactionId}
+    
+    %% Phase 2: User Approval
+    FE->>PP: Redirect user to approval_url
+    PP->>PP: User login & approve
+    PP->>FE: Redirect success URL with token & PayerID
+    
+    %% Phase 2.5: Capture
+    FE->>+BE: GET /payments/capture?token=xxx&PayerID=yyy
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: Return access_token
+    BE->>+PP: POST /v2/checkout/orders/{orderId}/capture
+    PP->>-BE: Return capture details {status: "COMPLETED"}
+    
+    BE->>+DB: Update transaction {status: "completed", capture_id}
+    DB->>-BE: Transaction updated
+    BE->>+DB: Update booking {status: "confirmed"}
+    DB->>-BE: Booking confirmed
+    BE->>-FE: {status: "completed", bookingConfirmed: true}
+    
+    %% Phase 3: Webhook
+    PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.CAPTURE.COMPLETED
+    BE->>+PP: Verify webhook
+    PP->>-BE: Verified
+    BE->>+DB: Update transaction {status: "completed"}
+    DB->>-BE: Transaction confirmed
+    BE->>-PP: 200 OK
+    
+    %% Optional Notify
+    BE->>FE: Push/WebSocket "Payment Completed"

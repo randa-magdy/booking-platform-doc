@@ -1,0 +1,46 @@
+sequenceDiagram
+    participant FE as Frontend
+    participant BE as Backend
+    participant PP as PayPal
+    participant DB as Database
+    
+    Note over FE: User clicks "Pay with PayPal"
+    
+    %% Create Order
+    FE->>+BE: POST /payments/process
+    BE->>+DB: Create transaction {status: "pending"}
+    DB->>-BE: Transaction created
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: Return access_token
+    BE->>+PP: POST /v2/checkout/orders
+    PP->>-BE: Return {order_id, approval_url}
+    BE->>+DB: Update transaction {paypal_order_id}
+    DB->>-BE: Transaction Updated
+    BE->>-FE: {redirectUrl, transactionId}
+    
+    %% User Attempt Fails
+    FE->>PP: Redirect user to approval_url
+    PP->>PP: User attempts but payment fails
+    PP->>FE: Redirect failure URL
+    
+    %% Capture Fails
+    FE->>+BE: GET /payments/capture
+    BE->>+PP: POST /v2/checkout/orders/{orderId}/capture
+    PP->>-BE: {status: "DECLINED"}
+    
+    BE->>+DB: Update transaction {status: "failed", reason: "DECLINED"}
+    DB->>-BE: Transaction updated
+    BE->>+DB: Update booking {status: "failed"}
+    DB->>-BE: Booking failed
+    BE->>-FE: {status: "failed", , bookingConfirmed: false}
+    
+    %% Webhook
+    PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.CAPTURE.DENIED
+    BE->>+PP: Verify webhook
+    PP->>-BE: Verified
+    BE->>+DB: Confirm status "failed"
+    DB->>-BE: Updated
+    BE->>-PP: 200 OK 
+    
+    %% Optional Notify
+    BE->>FE: Push/WebSocket "Payment Failed"

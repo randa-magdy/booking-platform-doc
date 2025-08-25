@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant FE as Frontend
+    participant BE as Backend
+    participant PP as PayPal
+    participant DB as Database
+    
+    Note over FE: User cancels at PayPal checkout
+    
+    FE->>PP: Redirect approval_url
+    PP->>PP: User clicks Cancel
+    PP->>FE: Redirect cancel_url (https://example.com/payment/cancelled)
+    
+    FE->>+BE: GET /payments/cancel?token=xxx
+    BE->>+DB: Update transaction {status: "cancelled"}
+    DB->>-BE: Transaction Updated
+    BE->>+DB: Update booking {status: "cancelled"}
+    DB->>-BE: Updated
+    BE->>-FE: {status: "cancelled", bookingCancelled: true}
+    
+    %% Optional Webhook
+    PP->>+BE: POST /payments/webhook/paypal<br/>CHECKOUT.ORDER.CANCELLED
+    BE->>+PP: Verify webhook
+    PP->>-BE: Verified
+    BE->>+DB: Confirm transaction "cancelled"
+    DB->>-BE: Transaction confirmed
+    BE->>-PP: 200 OK

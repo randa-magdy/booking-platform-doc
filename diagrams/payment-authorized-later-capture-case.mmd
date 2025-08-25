@@ -1,0 +1,72 @@
+sequenceDiagram
+    participant FE as Frontend
+    participant BE as Backend
+    participant PP as PayPal
+    participant DB as Database
+    
+    Note over FE: Payment flow configured as "Authorize Only"
+    
+    %% Create Order
+    FE->>+BE: POST /payments/process
+    BE->>+DB: Create transaction {status: "pending"}
+    DB->>-BE: Transaction Created
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: access_token
+    BE->>+PP: POST /v2/checkout/orders (intent=AUTHORIZE)
+    PP->>-BE: Return {order_id, approval_url}
+    BE->>+DB: Update transaction {paypal_order_id}
+    DB->>-BE: Transaction Updated
+    BE->>-FE: {redirectUrl, transactionId}
+    
+    %% User Approves
+    FE->>PP: Redirect user to approval_url
+    PP->>PP: User login & approve
+    PP->>FE: Redirect success URL with token & PayerID
+    
+    %% Authorization
+    FE->>+BE: GET /payments/capture?token=xxx
+    BE->>+PP: POST /v2/checkout/orders/{orderId}/authorize
+    PP->>-BE: Return authorize details {authorization_id, status: "AUTHORIZED"}
+    
+    BE->>+DB: Update transaction {status: "authorized", auth_id}
+    DB->>-BE: Transaction Updated
+    BE->>+DB: Update booking {status: "pending_payment"}
+    DB->>-BE: Booking Updated
+    BE->>-FE: {status: "authorized", bookingPending: true}
+    
+    %% Webhook AUTHORIZED
+    PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.AUTHORIZATION.CREATED
+    BE->>+PP: Verify webhook
+    PP->>-BE: Verified
+    BE->>+DB: Confirm transaction "authorized"
+    DB->>-BE: Transaction confirmed
+    BE->>-PP: 200 OK
+
+   Note over BE,PP: Capture is requested later (e.g. check-in date)
+   %% Later Capture by Merchant
+    alt Merchant Captures in Time
+        BE->>+PP: POST /v2/payments/authorizations/{auth_id}/capture
+        PP->>-BE: Return {capture_id, status: "COMPLETED"}
+        
+        BE->>+DB: Update transaction {status: "completed", capture_id}
+        DB->>-BE: Transaction Updated
+        BE->>+DB: Update booking {status: "confirmed"}
+        DB->>-BE: Booking Updated
+        
+        %% Webhook CAPTURED
+        PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.CAPTURE.COMPLETED
+        BE->>+PP: Verify webhook
+        PP->>-BE: Verified
+        BE->>+DB: Confirm transaction "completed"
+        DB->>-BE: Transaction confirmed
+        BE->>-PP: 200 OK
+    else Authorization Expires (~29 days)
+        PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.AUTHORIZATION.VOIDED
+        BE->>+PP: Verify webhook
+        PP->>-BE: Verified
+        BE->>+DB: Update transaction {status: "expired"}
+        DB->>-BE: Transaction Updated
+        BE->>+DB: Update booking {status: "expired_authorization"}
+        DB->>-BE: Booking Updated
+        BE->>-PP: 200 OK
+    end

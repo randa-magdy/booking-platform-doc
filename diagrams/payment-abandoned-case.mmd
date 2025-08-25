@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant FE as Frontend
+    participant BE as Backend
+    participant PP as PayPal
+    participant DB as Database
+    
+    Note over FE: User clicks "Pay with PayPal"
+    
+    %% Order Already Created
+    FE->>+BE: POST /payments/process
+    BE->>+DB: Create transaction {status: "pending"}
+    DB->>-BE: Transaction Created
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: Return access_token
+    BE->>+PP: POST /v2/checkout/orders
+    PP->>-BE: Return {order_id, approval_url}
+    BE->>+DB: Update transaction {paypal_order_id}
+    DB->>-BE: Transaction Updated
+    BE->>-FE: {redirectUrl, transactionId}
+    
+    %% Abandonment
+    FE->>PP: Redirect approval_url
+    Note over PP,FE: User closes tab or  never approves payment
+    Note over DB: Transaction remains "pending"
+    
+    %% Periodic Cleanup Job
+    BE->>+DB: Find pending transactions older than N hours
+    DB->>-BE: Pending list
+    BE->>+DB: Update transaction {status: "abandoned"}
+    DB->>-BE: Transaction Updated
+    BE->>+DB: Update booking {status: "payment_timeout"}
+    DB->>-BE: Booking Updated
