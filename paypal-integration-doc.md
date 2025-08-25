@@ -85,7 +85,7 @@ The payment integration supports:
 
 ### **Payment Flow Scenarios :**
 
-![Payment Integration Flowchart](./diagrams/payment-flows-flowchart.png)
+![Payment Integration Flowchart](./diagrams/payment-flows-flowchart.mmd)
 
 
 ### **1. Payment Completed Successfully**
