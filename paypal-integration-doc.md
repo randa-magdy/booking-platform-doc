@@ -21,10 +21,9 @@ The documentation includes:
 
      * [1. Payment Completed Successfully](#1-payment-completed-successfully)
      * [2. Payment Failed](#2-payment-failed)
-     * [3. Payment Cancelled by User](#3-payment-cancelled-by-user)
-     * [4. Payment Authorized but Not Captured](#4-payment-authorized-but-not-captured)
-     * [5. Refund Flow](#5-refund-flow)
-     * [6. User Abandons Payment](#6-user-abandons-payment)
+     * [3. Payment Authorized but Not Captured](#3-payment-authorized-but-not-captured)
+     * [4. Refund Flow](#4-refund-flow)
+     * [5. User Abandons Payment](#5-user-abandons-payment)
 3. [Pseudocode](#pseudocode)
 4. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
 5. [Data Model Description](#data-model-description)
@@ -155,38 +154,7 @@ The payment integration supports:
 
 ---
 
-### **3. Payment Cancelled by User**
-
-**Goal:** To handle the scenario where a user voluntarily aborts the payment process from within the PayPal interface.
-
-**Precondition:** The user has started the PayPal checkout flow but decides not to complete the payment.
-
-**Detailed Flow:**
-
-1.  The user clicks the **“Pay with PayPal”** button on the checkout page.
-2.  The frontend application sends a request to the backend API endpoint `POST /api/payments/process`, containing the booking ID.
-3.  The backend server updates the **Booking** status to `PENDING_PAYMENT` and creates a new **Transaction** record with a status of `PENDING`.
-4.  The backend authenticates with PayPal by calling `POST /v1/oauth2/token` using the merchant's Client ID and Secret to obtain an `access_token`.
-5.  Using this token, the backend calls the PayPal `POST /v2/checkout/orders` API with `intent: "CAPTURE"`, including amount, currency, and `redirect_urls`.
-6.  PayPal responds with a `201 Created` status, a PayPal `order_id`, and an `approval_url`.
-7.  The backend stores this `order_id` and `approval_url` against the Transaction record.
-8.  The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
-9.  On the PayPal page, the user clicks a **"Cancel and Return to Merchant"** button.
-10.  PayPal redirects the user's browser to the configured `cancelUrl` (e.g., `https://example.com/payment/cancelled`).
-11.  The page at the `cancelUrl` triggers logic to inform the backend of the cancellation, typically by calling an API like `POST /api/payments/{orderId}/cancel`.
-12. The backend server receives this API call, finds the relevant Transaction and Booking, and updates them to reflect the user's choice.
-13. The **Transaction** status is set to `CANCELLED`.
-14. The associated **Booking** status is set to `CANCELLED`.
-15. The frontend displays a message to the user: "Your payment was cancelled."
-
-**Postcondition:** The Transaction is `CANCELLED` and the Booking is `CANCELLED`.
-
-**Sequence diagram:**
-![Payment Cancelled Case ](./diagrams/payment-cancelled-by-user.png)
-
----
-
-### **4. Payment Authorized but Not Captured (Delayed Capture)**
+### **3. Payment Authorized but Not Captured (Delayed Capture)**
 
 **Goal:** To authorize a user's funds without immediately capturing them, allowing for capture at a later date.
 
@@ -218,7 +186,7 @@ The payment integration supports:
 
 ---
 
-### **5. Refund Flow**
+### **4. Refund Flow**
 
 **Goal:** To process a full or partial return of funds to the user after a booking has been paid for and confirmed.
 
@@ -227,7 +195,7 @@ The payment integration supports:
 **Detailed Flow:**
 
 1.  A user or admin initiates a refund request via the frontend or dashboard.
-2.  The frontend calls a backend endpoint like `POST /api/bookings/{id}/refund`.
+2.  The frontend (user, admin, or automated process) calls a backend endpoint such as `POST /api/bookings/{id}/refund`.
 3.  The backend validates the request and creates a **Refund** record with a status of `PENDING`, linked to the original transaction.
 4.  The backend obtains a fresh PayPal OAuth `access_token`.
 5.  The backend calls the PayPal Refund API: `POST /v2/payments/captures/{capture_id}/refund`.
@@ -235,17 +203,17 @@ The payment integration supports:
 7.  The backend verifies the webhook and updates the system:
     * The **Refund** record status is updated to `COMPLETED`.
     * The original **Transaction** status is updated to `REFUNDED`.
-    * The **Booking** status is updated to `REFUNDED`.
+    * The **Booking** status is updated to `CONFIRMED` or `CANCELLED`.
 8.  The frontend updates to show a confirmation that the refund has been processed.
 
-**Postcondition:** The Transaction is `REFUNDED`, the Booking is `REFUNDED`, and funds are returned.
+**Postcondition:** The Transaction is `REFUNDED`, the Booking status is updated to either `CONFIRMED` or `CANCELLED` (depending on the refund scenario), and funds are returned.
 
 **Sequence diagram:**
 ![Payment Refund Case ](./diagrams/payment-refund-case.png)
 
 ---
 
-### **6. User Abandons Payment**
+### **5. User Abandons Payment**
 
 **Goal:** To handle incomplete payment flows where the user leaves the PayPal checkout page without taking action.
 
