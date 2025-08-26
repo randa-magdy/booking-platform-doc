@@ -13,11 +13,11 @@ flowchart TD
     F --> G["DB: Update transaction with order_id, approval_url"]
     G --> H["Frontend redirects User to PayPal UI"]
     H --> I{"User Action?"}
-    I -- Approve --> J["User approves on PayPal UI (amount held on account)"]
+    I -- Approve --> O{"Payment Intent?"}
     I -- Abandon/Timeout --> L1["DB: Update transaction=ABANDONED"]
     L1 --> M1["DB: Booking status=PAYMENT_TIMEOUT"]
     M1 --> N1["Notify User: Payment not completed"]
-    J --> O{"Payment Intent?"}
+    
     O -- CAPTURE --> PC["Frontend returns to successUrl (Processing screen)"]
     PC --> PFE["Frontend calls POST /api/payments/{order_id}/capture"]
     PFE --> PD["Backend calls POST /v2/checkout/orders/{order_id}/capture"]
@@ -31,7 +31,8 @@ flowchart TD
     O -- AUTHORIZE --> PC2["Frontend returns to successUrl (Processing screen)"]
     PC2 --> QA["Frontend calls POST /api/payments/{order_id}/authorize"]
     QA --> QB["Backend calls POST /v2/checkout/orders/{order_id}/authorize"]
-    QB --> Q["PayPal triggers Authorization Webhook"]
+    QB --> J["Payment amount held/reserved on user`s account"]
+    J --> Q["PayPal triggers Authorization Webhook"]
     Q --> QV["Backend verifies Authorization Webhook Signature"]
     QV --> W["DB: Transaction=AUTHORIZED<br>Booking=AUTHORIZED"]
     W --> X["Notify User: Booking Authorized"]

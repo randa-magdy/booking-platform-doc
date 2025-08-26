@@ -170,13 +170,11 @@ The payment integration supports:
 6.  The backend stores this `order_id` and `approval_url` against the Transaction record.
 7.  The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
 9. The user logs into PayPal and confirms the payment on PayPal's page.
-
-   * At this point, the payment amount is **held/reserved** on the user’s account (funds are not yet captured, but unavailable for other transactions).
 10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`) along with the `order_id`.
 
 11. **Frontend calls backend** endpoint to authorize the order `POST /api/payments/{order_id}/authorize`
 12. Backend uses stored `order_id` and access token to call `POST /v2/checkout/orders/{order_id}/authorize`
-
+* At this point, the payment amount is **held/reserved** on the user’s account (funds are not yet captured, but unavailable for other transactions).
 * PayPal returns `authorization_id` and status.
 
 13. Backend updates the Transaction (`AUTHORIZED`) and Booking (`AUTHORIZED`).

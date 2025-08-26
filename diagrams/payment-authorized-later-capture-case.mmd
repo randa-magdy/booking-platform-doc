@@ -29,10 +29,11 @@ sequenceDiagram
     PP->>PP: User login & approve
     PP->>FE: Redirect successUrl?token=xxx&order_id=orderxxx
 
-    Note over FE: payment amount may be "held/reserved" on the user’s account
+    
     %% Authorization
     FE->>+BE: POST /api/payments/{order_id}/authorize
     BE->>+PP: POST /v2/checkout/orders/{orderId}/authorize
+    Note over PP: payment amount "held/reserved" on the user’s account
     PP->>-BE: Return authorize details {authorization_id, status: "AUTHORIZED"}
     
     BE->>+DB: Update transaction {status: "authorized", auth_id}
