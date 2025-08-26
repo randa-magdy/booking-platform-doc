@@ -156,9 +156,9 @@ The payment integration supports:
 
 ### **3. Payment Authorized but Not Captured (Delayed Capture)**
 
-**Goal:** To authorize a user's funds without immediately capturing them, allowing for capture at a later date.
+**Goal:** To authorize a user's funds without immediately capturing them, allowing for capture at a later date while holding the amount on the user’s account.
 
-**Precondition:** The merchant's business model requires an authorization hold first.
+**Precondition:** The merchant’s business model requires an authorization hold first (e.g., hotel booking or delayed service).
 
 **Detailed Flow:**
 
@@ -169,17 +169,39 @@ The payment integration supports:
 5.  **Critical Difference:** The backend calls `POST /v2/checkout/orders` with `intent: "AUTHORIZE"`.
 6.  The backend stores this `order_id` and `approval_url` against the Transaction record.
 7.  The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
-8.  The user approves the payment on PayPal, which authorizes the merchant to withdraw funds later.
-9.  PayPal sends a `PAYMENT.AUTHORIZATION.CREATED` webhook to the backend.
-10. The backend processes the webhook and updates the records:
-    * The **Transaction** status is updated to `AUTHORIZED`.
-    * The **Booking** status is updated to `AUTHORIZED`.
-11. **Later Capture:** When the merchant decides to capture the funds (e.g., after service delivery), a backend process calls the PayPal `POST /v2/payments/authorizations/{auth_id}/capture` API.
-12. Upon successful capture, PayPal sends a `PAYMENT.CAPTURE.COMPLETED` webhook.
-13. The backend processes this webhook and updates the **Transaction** status to `COMPLETED` and the **Booking** status to `CONFIRMED`.
-14. **Expiry Handling:** If the capture is not performed within ~29 days, PayPal voids the authorization and sends a `PAYMENT.AUTHORIZATION.VOIDED` webhook. The backend must handle this by updating the **Transaction** to `EXPIRED` and the **Booking** to `EXPIRED_AUTHORIZATION`.
+9. The user logs into PayPal and confirms the payment on PayPal's page.
 
-**Postcondition:** The system holds an authorized payment that transitions to `COMPLETED` or `EXPIRED`.
+   * At this point, the payment amount is **held/reserved** on the user’s account (funds are not yet captured, but unavailable for other transactions).
+10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`) along with the `order_id`.
+
+11. **Frontend calls backend** endpoint to authorize the order `POST /api/payments/{order_id}/authorize`
+12. Backend uses stored `order_id` and access token to call `POST /v2/checkout/orders/{order_id}/authorize`
+
+* PayPal returns `authorization_id` and status.
+
+13. Backend updates the Transaction (`AUTHORIZED`) and Booking (`AUTHORIZED`).
+
+14. **Webhook:** PayPal sends `PAYMENT.AUTHORIZATION.CREATED` to the backend.
+
+* Backend verifies the webhook and reconciles the Transaction and Booking.
+
+15. **Later Capture:** When the merchant decides to capture the funds (e.g., after service delivery), backend calls `POST /v2/payments/authorizations/{authorization_id}/capture`
+
+* PayPal captures the held funds and responds with capture details.
+
+16. PayPal sends a `PAYMENT.CAPTURE.COMPLETED` webhook.
+
+* Backend updates Transaction (`COMPLETED`) and Booking (`CONFIRMED`).
+
+17. **Expiry Handling:** If capture is **not performed within \~29 days**, PayPal voids the authorization and sends a `PAYMENT.AUTHORIZATION.VOIDED` webhook.
+
+* Backend updates Transaction (`EXPIRED`) and Booking (`EXPIRED_AUTHORIZATION`).
+
+**Postcondition:**
+
+* Transaction = `AUTHORIZED`, `COMPLETED`, or `EXPIRED` depending on capture.
+* Booking = `AUTHORIZED`, `CONFIRMED`, or `EXPIRED_AUTHORIZATION`.
+* Amount may be held in the user’s account until capture or expiry.
 
 **Sequence diagram:**
 ![Payment Delayed Capture Case](./diagrams/payment-authorized-later-capture-case.png)
