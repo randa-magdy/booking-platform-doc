@@ -6,27 +6,34 @@ sequenceDiagram
     
     Note over FE: User clicks "Pay with PayPal"
     
-    %% Create Order
-    FE->>+BE: POST /payments/process
-    BE->>+DB: Create transaction {status: "pending"}
-    DB->>-BE: Transaction created
+    %% Phase 1: Payment Request
+    FE->>+BE: POST /api/payments/process<br/>{bookingId: "123", provider: "paypal"}
+    BE->>+DB: Create booking {status: "PENDING_PAYMENT"}
+    BE->>+DB: Create transaction {status: "PENDING", amount: 150}
+    DB->>-BE: Records created
+    
     BE->>+PP: POST /v1/oauth2/token
     PP->>-BE: Return access_token
-    BE->>+PP: POST /v2/checkout/orders
+    
+    BE->>+PP: POST /v2/checkout/orders {intent: "CAPTURE"}
     PP->>-BE: Return {order_id, approval_url}
-    BE->>+DB: Update transaction {paypal_order_id}
-    DB->>-BE: Transaction Updated
+    
+    BE->>+DB: Update transaction {paypal_order_id: "order_789"}
+    DB->>-BE: Transaction updated
+    
     BE->>-FE: {redirectUrl, transactionId}
     
-    %% User Attempt Fails
+    %% Phase 2: User Approval
     FE->>PP: Redirect user to approval_url
-    PP->>PP: User attempts but payment fails
-    PP->>FE: Redirect failure URL
+    PP->>PP: User login & approve
+    PP->>FE: Redirect successUrl?token=xxx&order_id=order_789
     
-    %% Capture Fails
-    FE->>+BE: GET /payments/capture
-    BE->>+PP: POST /v2/checkout/orders/{orderId}/capture
-    PP->>-BE: {status: "DECLINED"}
+    %% Phase 2.5: Capture Fail
+    FE->>+BE: POST /api/payments/{order_id}/capture
+    BE->>+PP: POST /v1/oauth2/token
+    PP->>-BE: Return access_token
+    BE->>+PP: POST /v2/checkout/orders/{order_id}/capture
+    PP->>-BE: Return {status: "DECLINED"}
     
     BE->>+DB: Update transaction {status: "failed", reason: "DECLINED"}
     DB->>-BE: Transaction updated

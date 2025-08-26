@@ -3,28 +3,33 @@ config:
   theme: base
 ---
 flowchart TD
+    %% User starts payment
     A@{ label: "User clicks 'Pay with PayPal'" } --> B["Frontend calls POST /payments/process"]
     B --> C["Backend creates booking: PENDING_PAYMENT"]
     C --> D["DB: Save transaction status=PENDING"]
+
+    %% Authenticate with PayPal
     D --> BA["Backend requests PayPal OAuth Token"]
     BA --> BB["PayPal returns access_token"]
+
+    %% Create order
     BB --> E["Backend calls PayPal POST /v2/checkout/orders with access_token"]
     E --> F["PayPal returns order_id + approval_url"]
     F --> G["DB: Update transaction with order_id, approval_url"]
     G --> H["Frontend redirects User to PayPal UI"]
+
+    %% User action
     H --> I{"User Action?"}
-    I -- Approve --> J["PayPal processes payment approval"]
-    I -- Cancel --> K["PayPal redirects to cancelUrl"]
+    I -- Approve --> J["User approves on PayPal UI (amount held on account)"]
     I -- Abandon/Timeout --> L1["DB: Update transaction=ABANDONED"]
     L1 --> M1["DB: Booking status=PAYMENT_TIMEOUT"]
     M1 --> N1["Notify User: Payment not completed"]
-    K --> L["DB: Update transaction=CANCELLED_BY_USER"]
-    L --> M["DB: Booking status=CANCELLED"]
-    M --> N["Notify User: Payment Cancelled"]
+
+    %% Payment Intent
     J --> O{"Payment Intent?"}
     O -- CAPTURE --> PC["Frontend returns to successUrl (Processing screen)"]
     PC --> PFE["Frontend calls POST /api/payments/{order_id}/capture"]
-    PFE --> PD["Backend calls POST /v2/checkout/orders/{id}/capture"]
+    PFE --> PD["Backend calls POST /v2/checkout/orders/{order_id}/capture"]
     PD --> PE{"Capture Result?"}
     PE -- Success --> PF["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
     PE -- Failed --> PG["DB: Transaction=FAILED<br>Booking=FAILED"]
@@ -32,10 +37,16 @@ flowchart TD
     PWH --> PV["Backend verifies webhook signature"]
     PV --> PWF["Reconcile DB (idempotent update if already COMPLETED)"]
     PG --> V["Notify User: Payment Failed"]
-    O -- AUTHORIZE --> Q["PayPal triggers Authorization Webhook"]
+
+    O -- AUTHORIZE --> PC2["Frontend returns to successUrl (Processing screen)"]
+    PC2 --> QA["Frontend calls POST /api/payments/{order_id}/authorize"]
+    QA --> QB["Backend calls POST /v2/checkout/orders/{order_id}/authorize"]
+    QB --> Q["PayPal triggers Authorization Webhook"]
     Q --> QV["Backend verifies Authorization Webhook Signature"]
     QV --> W["DB: Transaction=AUTHORIZED<br>Booking=AUTHORIZED"]
     W --> X["Notify User: Booking Authorized"]
+
+    %% Delayed Capture
     X --> Y{"Merchant Captures Later?"}
     Y -- Yes --> Z["Backend calls PayPal POST /v2/payments/authorizations/{id}/capture"]
     Z --> ZV["DB: Transaction=COMPLETED<br>Booking=CONFIRMED"]
@@ -44,19 +55,22 @@ flowchart TD
     AA --> AAV["Backend verifies Expired Webhook Signature"]
     AAV --> AD["DB: Transaction=EXPIRED<br>Booking=EXPIRED_AUTHORIZATION"]
     AD --> AE["Notify User: Authorization Expired"]
+
+    %% Refund Flow
     U --> AF{"User Requests Refund?"}
     AC --> AF
     AF -- Yes --> AG["Backend calls PayPal Refund API <br> POST /v2/payments/captures/{capture_id}/refund"]
     AG --> AH["DB: Create Refund Record=PENDING"]
     AH --> AI["PayPal triggers Refund Webhook"]
     AI --> AIV["Backend verifies Refund Webhook Signature"]
-    AIV --> AJ["DB: Refund=COMPLETED<br>Transaction=PARTIALLY_REFUNDED or REFUNDED<br>Booking=REFUNDED"]
+    AIV --> AJ["DB: Refund=COMPLETED<br>Transaction=PARTIALLY_REFUNDED or REFUNDED<br>Booking=CONFIRMED or CANCELLED"]
     AJ --> AK["Notify User: Refund Processed"]
     AF -- No --> AL["End of Payment Cycle"]
+
+    %% Styles
     style A fill:#FFCDD2
     style I fill:#FFE0B2
     style N1 fill:#FFCDD2
-    style N fill:#FFCDD2
     style O fill:#FFE0B2
     style PE fill:#FFE0B2
     style PWF fill:#FFCDD2
@@ -66,3 +80,4 @@ flowchart TD
     style AF fill:#FFE0B2
     style AK fill:#FFCDD2
     style AL fill:#FFCDD2
+    style N fill:#FFCDD2

@@ -7,14 +7,15 @@ sequenceDiagram
     Note over FE: User clicks "Pay with PayPal"
     
     %% Phase 1: Payment Request
-    FE->>+BE: POST /payments/process<br/>{provider: "paypal", amount: 150, bookingId: "123"}
-    BE->>+DB: Create transaction {status: "pending", amount: 150}
-    DB->>-BE: Transaction created {id: "txn_456"}
+    FE->>+BE: POST /api/payments/process<br/>{bookingId: "123", provider: "paypal"}
+    BE->>+DB: Create booking {status: "PENDING_PAYMENT"}
+    BE->>+DB: Create transaction {status: "PENDING", amount: 150}
+    DB->>-BE: Records created
     
     BE->>+PP: POST /v1/oauth2/token
     PP->>-BE: Return access_token
     
-    BE->>+PP: POST /v2/checkout/orders
+    BE->>+PP: POST /v2/checkout/orders {intent: "CAPTURE"}
     PP->>-BE: Return {order_id, approval_url}
     
     BE->>+DB: Update transaction {paypal_order_id: "order_789"}
@@ -25,26 +26,25 @@ sequenceDiagram
     %% Phase 2: User Approval
     FE->>PP: Redirect user to approval_url
     PP->>PP: User login & approve
-    PP->>FE: Redirect success URL with token & PayerID
+    PP->>FE: Redirect successUrl?token=xxx&order_id=order_789
     
     %% Phase 2.5: Capture
-    FE->>+BE: GET /payments/capture?token=xxx&PayerID=yyy
+    FE->>+BE: POST /api/payments/{order_id}/capture
     BE->>+PP: POST /v1/oauth2/token
     PP->>-BE: Return access_token
-    BE->>+PP: POST /v2/checkout/orders/{orderId}/capture
-    PP->>-BE: Return capture details {status: "COMPLETED"}
+    BE->>+PP: POST /v2/checkout/orders/{order_id}/capture
+    PP->>-BE: Return capture details {status: "COMPLETED", capture_id}
     
-    BE->>+DB: Update transaction {status: "completed", capture_id}
-    DB->>-BE: Transaction updated
-    BE->>+DB: Update booking {status: "confirmed"}
-    DB->>-BE: Booking confirmed
-    BE->>-FE: {status: "completed", bookingConfirmed: true}
+    BE->>+DB: Update transaction {status: "COMPLETED", capture_id}
+    BE->>+DB: Update booking {status: "CONFIRMED"}
+    DB->>-BE: Updates applied
+    BE->>-FE: {status: "COMPLETED", bookingConfirmed: true}
     
     %% Phase 3: Webhook
-    PP->>+BE: POST /payments/webhook/paypal<br/>PAYMENT.CAPTURE.COMPLETED
-    BE->>+PP: Verify webhook
+    PP->>+BE: POST /api/webhooks/paypal<br/>PAYMENT.CAPTURE.COMPLETED
+    BE->>+PP: Verify webhook signature
     PP->>-BE: Verified
-    BE->>+DB: Update transaction {status: "completed"}
+    BE->>+DB: Reconcile transaction {status: "COMPLETED"}
     DB->>-BE: Transaction confirmed
     BE->>-PP: 200 OK
     

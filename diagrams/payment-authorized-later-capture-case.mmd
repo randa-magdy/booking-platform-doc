@@ -4,27 +4,34 @@ sequenceDiagram
     participant PP as PayPal
     participant DB as Database
     
-    Note over FE: Payment flow configured as "Authorize Only"
     
-    %% Create Order
-    FE->>+BE: POST /payments/process
-    BE->>+DB: Create transaction {status: "pending"}
-    DB->>-BE: Transaction Created
+    Note over FE: User clicks "Pay with PayPal"
+    
+    %% Phase 1: Payment Request
+    FE->>+BE: POST /api/payments/process<br/>{bookingId: "xxx", provider: "paypal"}
+    BE->>+DB: Create booking {status: "PENDING_PAYMENT"}
+    BE->>+DB: Create transaction {status: "PENDING", amount: 150}
+    DB->>-BE: Records created
+    
     BE->>+PP: POST /v1/oauth2/token
-    PP->>-BE: access_token
-    BE->>+PP: POST /v2/checkout/orders (intent=AUTHORIZE)
+    PP->>-BE: Return access_token
+    
+    BE->>+PP: POST /v2/checkout/orders {intent: "CAPTURE"}
     PP->>-BE: Return {order_id, approval_url}
+    
     BE->>+DB: Update transaction {paypal_order_id}
-    DB->>-BE: Transaction Updated
+    DB->>-BE: Transaction updated
+    
     BE->>-FE: {redirectUrl, transactionId}
     
-    %% User Approves
+    %% Phase 2: User Approval
     FE->>PP: Redirect user to approval_url
     PP->>PP: User login & approve
-    PP->>FE: Redirect success URL with token & PayerID
-    
+    PP->>FE: Redirect successUrl?token=xxx&order_id=orderxxx
+
+    Note over FE: payment amount may be "held/reserved" on the user’s account
     %% Authorization
-    FE->>+BE: GET /payments/capture?token=xxx
+    FE->>+BE: POST /api/payments/{order_id}/authorize
     BE->>+PP: POST /v2/checkout/orders/{orderId}/authorize
     PP->>-BE: Return authorize details {authorization_id, status: "AUTHORIZED"}
     
