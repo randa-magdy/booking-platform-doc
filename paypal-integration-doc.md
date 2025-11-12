@@ -99,7 +99,7 @@ The payment integration supports:
 2. The frontend application sends a request to the backend API endpoint `POST /api/payments/process`, containing the booking ID.
 3. The backend server updates the **Booking** status to `PENDING_PAYMENT` and creates a new **Transaction** record with a status of `PENDING`.
 4. The backend authenticates with PayPal by calling `POST /v1/oauth2/token` using the merchant's Client ID and Secret to obtain an `access_token`.
-5. Using this token, the backend calls the PayPal `POST /v2/checkout/orders` API with `intent: "CAPTURE"`, including amount, currency, and `redirect_urls`.
+5. Using this token, the backend calls the PayPal `POST /v2/checkout/orders` API with `intent: "CAPTURE"`, including `amount`, `currency`, and `redirect_urls`.
 6. PayPal responds with a `201 Created` status, a PayPal `order_id`, and an `approval_url`.
 7. The backend stores this `order_id` and `approval_url` against the Transaction record.
 8. The backend responds to the frontend with the `approval_url`, and the frontend redirects the user's browser to it.
