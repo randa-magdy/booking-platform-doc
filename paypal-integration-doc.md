@@ -107,7 +107,7 @@ The payment integration supports:
 10. Upon approval, PayPal redirects the user's browser back to the configured `returnUrl` (e.g., `https://example.com/payment/success`) along with the `order_id`.
 11. The frontend calls the backend API endpoint `POST /api/payments/{order_id}/capture`.
 12. The backend, using the stored `order_id` and access token, calls PayPal’s `POST /v2/checkout/orders/{order_id}/capture` endpoint to finalize the payment.
-13. PayPal responds with a `201 Created` and the capture details (including `capture_id`, status, and amount).
+13. PayPal responds with a `201 Created` and the capture details (including `capture_id`, `status`, and `amount`).
 14. The backend updates the **Transaction** status to `COMPLETED` and the **Booking** status to `CONFIRMED`.
 15. **In parallel**, PayPal also sends an asynchronous `PAYMENT.CAPTURE.COMPLETED` webhook event to the backend’s webhook listener (`POST /api/webhooks/paypal`).
 16. The backend receives the webhook, verifies its cryptographic signature to confirm it’s from PayPal, and reconciles it against the transaction record for extra reliability.
