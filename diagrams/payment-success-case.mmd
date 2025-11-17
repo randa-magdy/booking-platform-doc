@@ -33,12 +33,12 @@ sequenceDiagram
     BE->>+PP: POST /v1/oauth2/token
     PP->>-BE: Return access_token
     BE->>+PP: POST /v2/checkout/orders/{order_id}/capture
-    PP->>-BE: Return capture details {status: "COMPLETED", capture_id}
+    PP->>-BE: Return capture details {status: "COMPLETED", capture_id, ...}
     
-    BE->>+DB: Update transaction {status: "COMPLETED", capture_id}
+    BE->>+DB: Update transaction {status: "CAPTURED", ...}
     BE->>+DB: Update booking {status: "CONFIRMED"}
     DB->>-BE: Updates applied
-    BE->>-FE: {status: "COMPLETED", bookingConfirmed: true}
+    BE->>-FE: {status: "CAPTURED", bookingConfirmed: true}
     
     %% Phase 3: Webhook
     PP->>+BE: POST /api/webhooks/paypal<br/>PAYMENT.CAPTURE.COMPLETED
