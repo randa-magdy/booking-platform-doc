@@ -9,7 +9,7 @@ sequenceDiagram
     %% Phase 1: Payment Request
     FE->>+BE: POST /api/payments/process<br/>{bookingId: "123", provider: "paypal"}
     BE->>+DB: Create booking {status: "PENDING_PAYMENT"}
-    BE->>+DB: Create transaction {status: "PENDING", amount: 150}
+    BE->>+DB: Create transaction {status: "INITIATED", amount: 150 , currency: 'USD'}
     DB->>-BE: Records created
     
     BE->>+PP: POST /v1/oauth2/token
@@ -18,10 +18,10 @@ sequenceDiagram
     BE->>+PP: POST /v2/checkout/orders {intent: "CAPTURE"}
     PP->>-BE: Return {order_id, approval_url}
     
-    BE->>+DB: Update transaction {paypal_order_id: "order_789"}
+    BE->>+DB: Update transaction {paypal_order_id: "order_789", status:"CREATED"}
     DB->>-BE: Transaction updated
     
-    BE->>-FE: {redirectUrl, transactionId}
+    BE->>-FE: {order_id, approval_url}
     
     %% Phase 2: User Approval
     FE->>PP: Redirect user to approval_url
