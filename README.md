@@ -49,7 +49,7 @@ Please refer to [Features and Functionalities Document](./features-documentation
    * Get User Profile
    * Update user profile
    * Enable / Disable account
-   * Verify Account [Email or SMS]
+   * Verify Account [Email]
    * Social Login
      
 ### **2. Search & Filter (Amadeus)**:
