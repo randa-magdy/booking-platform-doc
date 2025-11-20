@@ -46,7 +46,6 @@ Please refer to [Features and Functionalities Document](./features-documentation
    * Create User Account
    * Login
    * Logout
-   * Forget Password
    * Get User Profile
    * Update user profile
    * Enable / Disable account
