@@ -1,13 +1,7 @@
 # **Features & Functionalities — Business Level**
 
-## **Introduction**
-
 This document outlines the business features and core functional capabilities of the Booking Platform.
 It describes how users (customers/guests) interact with the system at a business level, including searching, booking, managing reservations, handling payments, and receiving notifications.
-
----
-
-# **Features & Functionalities**
 
 ---
 
