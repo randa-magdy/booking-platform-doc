@@ -7,15 +7,13 @@ It describes how users(customers)/guests interact with the system at a business 
 
 ---
 
-# **Features & Functionalities**
+## **Features & Functionalities**
 
 ## **User Registration & Authentication**
-
-### **1. Create User Account**
-
+* **1. Create User Account**
 Allow users to register and create an account using Google, Facebook, or email-based registration with a verification code.
 
-### **2. Login to the Platform**
+* **2. Login to the Platform**
 
 Allow users to log in using Google, Facebook, or their email and verification code.
 
