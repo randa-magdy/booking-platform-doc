@@ -118,7 +118,23 @@ Please refer to [Features and Functionalities Document](./features-documentation
 
 ### `Use Case Diagram` 
 
-A visual representation of use cases and actors
+```mermaid
+ flowchart LR
+    A["Customer"] --> UC0("Register/Login") & UC1("Search Flights/Hotels") & UC2("Filter Results") & UC4("View Details Flight/Hotel") & UC5("Manage User Account") & UC6("Book Flight/Hotel") & UC8("Manage  Bookings") & UC9("Payment Integration") & UC10("Receive Notifications")
+    B["Admin"] --> UC11("Manage Users") & UC12("Monitor Bookings") & UC14("Reporting & Dashboard")
+    C["Customer Service"] --> UC15("Assist Customer") & UC16("Handle Issues")
+    UC1 --> E["Amadeus Provider"]
+    UC4 --> E
+    UC6 --> E
+    UC8 --> E
+    UC9 --> D["Payment Provider"]
 
-![Booking Use Case Diagram](./diagrams/booking-use-case-modal.png) 
+     A:::actor
+     B:::actor
+     C:::actor
+     E:::external
+     D:::external
+    classDef actor fill:#f6d6ff,stroke:#7a3ea0,stroke-width:2px
+    classDef external fill:#d7f5ff,stroke:#1b7899,stroke-width:2px
+```
 
