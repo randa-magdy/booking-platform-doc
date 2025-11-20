@@ -3,206 +3,216 @@
 ## **Introduction**
 
 This document outlines the business features and core functional capabilities of the Booking Platform.
-It describes how users(customers)/guests interact with the system at a business level, including searching, booking, managing reservations, handling payments, and receiving notifications.
+It describes how users (customers/guests) interact with the system at a business level, including searching, booking, managing reservations, handling payments, and receiving notifications.
 
 ---
 
-## **Features & Functionalities**
+# **Features & Functionalities**
 
-### **User Registration & Authentication**
+---
 
-   #### **1. Create User Account**
-   Allow users to register and create an account using Google, Facebook, or email-based registration with a verification code.
+## **User Registration & Authentication**
 
-   #### **2. Login to the Platform**
+#### **1. Create User Account**
 
-   Allow users to log in using Google, Facebook, or their email and verification code.
+Allow users to register and create an account using Google, Facebook, or email-based registration with a verification code.
 
-   #### **3. Logout from the Platform**
+#### **2. Login to the Platform**
 
-   Allow users to safely end their active session.
+Allow users to log in using Google, Facebook, or their email and verification code.
 
-   #### **4. Manage User Profile**
+#### **3. Logout from the Platform**
 
-   Let users update personal details such as name, phone number, address, preferences (e.g., language, currency), and saved information.
+Allow users to safely end their active session.
 
-   #### **5. Deactivate or Reactivate Account**
+#### **4. Manage User Profile**
 
-   Provide the ability to disable or enable user account.
+Let users update personal details such as name, phone number, address, preferences (e.g., language, currency), and saved information.
 
+#### **5. Deactivate or Reactivate Account**
 
-### **Flight Search & Booking**
+Provide the ability to disable or enable user account.
 
-   #### **1. Search for Flights**
+---
 
-   Customers/Guests can search flights based on location, travel dates, passenger count, and trip type.
+## **Flight Search & Booking**
 
-   #### **2. Apply Flight Filters**
+#### **1. Search for Flights**
 
-   Filter search results by price, stops, airlines, travel duration, time, or cabin class.
+Customers/Guests can search flights based on location, travel dates, passenger count, and trip type.
 
-   #### **3. View Flight Details**
+#### **2. Apply Flight Filters**
 
-   Show full information about flights including stops, baggage, fare rules, and timings.
+Filter search results by price, stops, airlines, travel duration, time, or cabin class.
 
-   #### **4. Verify Flight Price**
+#### **3. View Flight Details**
 
-   Confirm final fare before proceeding with booking.
+Show full information about flights including stops, baggage, fare rules, and timings.
 
-   #### **5. Book a Flight**
+#### **4. Verify Flight Price**
 
-   Complete a flight reservation by selecting desired itinerary and providing traveler details.
+Confirm final fare before proceeding with booking.
 
-   #### **6. Manage Flight Bookings**
+#### **5. Book a Flight**
 
-   Allow users(customers) to view or modify their flight bookings as allowed by provider policies.
+Complete a flight reservation by selecting desired itinerary and providing traveler details.
 
+#### **6. Manage Flight Bookings**
 
-### **Hotel Search & Booking**
+Allow users (customers) to view or modify their flight bookings as allowed by provider policies.
 
-   #### **1. Search for Hotels**
+---
 
-   Users can search available hotels by city, hotel name, dates, number of guests, or rooms.
+## **Hotel Search & Booking**
 
-   #### **2. Apply Hotel Filters**
+#### **1. Search for Hotels**
 
-   Narrow results using filters such as price range, rating, amenities, location, or room type.
+Users can search available hotels by city, hotel name, dates, number of guests, or rooms.
 
-   #### **3. View Hotel Details**
+#### **2. Apply Hotel Filters**
 
-   Provide photos, descriptions, policies, amenities, available room details, pricing, cancellation rules, ratings, and reviews.
+Narrow results using filters such as price range, rating, amenities, location, or room type.
 
-   #### **4. Check Availability**
+#### **3. View Hotel Details**
 
-   Confirm that the selected room is still available before final booking.
+Provide photos, descriptions, policies, amenities, available room details, pricing, cancellation rules, ratings, and reviews.
 
-   #### **5. Book a Hotel**
+#### **4. Check Availability**
 
-   Allow users(customers)/guests to complete full hotel reservations.
+Confirm that the selected room is still available before final booking.
 
-   #### **6. Manage Hotel Bookings**
+#### **5. Book a Hotel**
 
-   Enable users(customers) to view and edit hotel reservations when possible.
+Allow users (customers/guests) to complete full hotel reservations.
 
-   #### **7. Cancel Hotel Booking**
+#### **6. Manage Hotel Bookings**
 
-   Users(customers) can cancel their hotel booking depending on cancellation rules.
+Enable users (customers) to view and edit hotel reservations when possible.
 
+#### **7. Cancel Hotel Booking**
 
-### **Payment Processing**
+Users (customers) can cancel their hotel booking depending on cancellation rules.
 
-   #### **1. Initiate Payment**
+---
 
-   Start the payment process for a flight or hotel booking based on the selected payment method (e.g., Stripe, PayPal).
+## **Payment Processing**
 
-   #### **2. Complete Payment**
+#### **1. Initiate Payment**
 
-   Redirect users(customers)/guests to finalize payment.
+Start the payment process for a flight or hotel booking based on the selected payment method (e.g., Stripe, PayPal).
 
-   #### **3. Payment Confirmation**
+#### **2. Complete Payment**
 
-   Notify users(customers)/guests when payment is successfully completed.
+Redirect users (customers/guests) to finalize payment.
 
-   #### **4. Payment Failure Handling**
+#### **3. Payment Confirmation**
 
-   Inform the user(customer)/guest if the payment failed, expired, or was canceled.
+Notify users (customers/guests) when payment is successfully completed.
 
-   #### **5. Request Refund**
+#### **4. Payment Failure Handling**
 
-   Enable users(customers) to submit refund requests when eligible.
+Inform the user (customer/guest) if the payment failed, expired, or was canceled.
 
+#### **5. Request Refund**
 
-### **Booking Management**
+Enable users (customers) to submit refund requests when eligible.
 
-   #### **1. View All Bookings**
+---
 
-   Users(customers) can view all active, completed, and cancelled bookings.
+## **Booking Management**
 
-   #### **2. Get Booking Details**
+#### **1. View All Bookings**
 
-   Users(customers) can display detailed information for each booking.
+Users (customers) can view all active, completed, and cancelled bookings.
 
-   #### **3. Cancel Reservations**
+#### **2. Get Booking Details**
 
-   Allow users(customers) to cancel bookings based on provider rules.
+Users (customers) can display detailed information for each booking.
 
-   #### **4. Booking Modification**
+#### **3. Cancel Reservations**
 
-   Support modifications like adding traveler info, changing dates, or adding additional services.
+Allow users (customers) to cancel bookings based on provider rules.
 
+#### **4. Booking Modification**
 
-### **Notifications**
+Support modifications like adding traveler info, changing dates, or adding additional services.
 
-   #### **1. Booking Confirmation Notifications**
+---
 
-   Send confirmation notifications via email or SMS after booking for users(customers)/guests.
+## **Notifications**
 
-   #### **2. Payment Status Notifications**
+#### **1. Booking Confirmation Notifications**
 
-   Notify users(customers)/guests about successful or failed transactions.
+Send confirmation notifications via email or SMS after booking for users (customers/guests).
 
-   #### **3. Promotional Notifications**
+#### **2. Payment Status Notifications**
 
-   Send offers or deals based on user(customer) preference.
+Notify users (customers/guests) about successful or failed transactions.
 
-   #### **4. Opt-In / Opt-Out Preferences**
+#### **3. Promotional Notifications**
 
-   Allow users(customers) to subscribe or unsubscribe from notifications.
+Send offers or deals based on user (customer) preference.
 
+#### **4. Opt-In / Opt-Out Preferences**
 
-### **Customer Management**
+Allow users (customers) to subscribe or unsubscribe from notifications.
 
-   #### **1. Manage Preferred Payment Method**
+---
 
-   Customers can set and update their preferred payment type.
+## **Customer Management**
 
-   #### **2. View Booking History**
+#### **1. Manage Preferred Payment Method**
 
-   Display complete history of previous flights and hotels.
+Customers can set and update their preferred payment type.
 
-   #### **3. Submit Ratings & Reviews**
+#### **2. View Booking History**
 
-   Customers can leave ratings and reviews for hotel after their stay.
+Display complete history of previous flights and hotels.
 
-   #### **4. Access Customer Support**
+#### **3. Submit Ratings & Reviews**
 
-   Allow customers to request assistance, open tickets, or use chat support.
+Customers can leave ratings and reviews for hotel after their stay.
 
-   #### **5. Save Preferred Flight/Hotel**
+#### **4. Access Customer Support**
 
-   Customers can save their preferred flight, hotel.
+Allow customers to request assistance, open tickets, or use chat support.
 
+#### **5. Save Preferred Flight/Hotel**
 
-### **Reporting & Dashboards (Admin Only)**
+Customers can save their preferred flight, hotel.
 
-   #### **1. Manage Platform Users**
+---
 
-   Admins can manage customer accounts.
+## **Reporting & Dashboards (Admin Only)**
 
-   #### **2. Monitor Bookings Activity**
+#### **1. Manage Platform Users**
 
-   Admins can monitor flight and hotel booking trends and performance.
+Admins can manage customer accounts.
 
-   #### **3. Generate Reports**
+#### **2. Monitor Bookings Activity**
 
-   Generate daily/monthly reports for bookings, payments, customer interactions and more.
+Admins can monitor flight and hotel booking trends and performance.
 
-   #### **4. View System Usage Analytics**
+#### **3. Generate Reports**
 
-   Admins can view system usage statistics and trends in the dashboard.
+Generate daily/monthly reports for bookings, payments, customer interactions, and more.
 
+#### **4. View System Usage Analytics**
 
-### **Customer Support Operations**
+Admins can view system usage statistics and trends in the dashboard.
 
-   #### **1. Booking Lookup for Support Team**
+---
 
-   Support agents can search for any booking to assist customers.
+## **Customer Support Operations**
 
-   #### **2. Handle Disputes**
+#### **1. Booking Lookup for Support Team**
 
-   Resolve issues related to payments, cancellations, or booking errors.
+Support agents can search for any booking to assist customers.
 
-   #### **3. Handle Customer Complaints**
+#### **2. Handle Disputes**
 
-   Support agents can handle customer complaints and resolve issues.
+Resolve issues related to payments, cancellations, or booking errors.
 
+#### **3. Handle Customer Complaints**
+
+Support agents can handle customer complaints and resolve issues.
