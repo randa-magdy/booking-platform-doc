@@ -11,197 +11,198 @@ It describes how users(customers)/guests interact with the system at a business 
 
 ### **User Registration & Authentication**
 
-#### **1. Create User Account**
-Allow users to register and create an account using Google, Facebook, or email-based registration with a verification code.
+   #### **1. Create User Account**
+   Allow users to register and create an account using Google, Facebook, or email-based registration with a verification code.
 
-#### **2. Login to the Platform**
+   #### **2. Login to the Platform**
 
-Allow users to log in using Google, Facebook, or their email and verification code.
+   Allow users to log in using Google, Facebook, or their email and verification code.
 
-#### **3. Logout from the Platform**
+   #### **3. Logout from the Platform**
 
-Allow users to safely end their active session.
+   Allow users to safely end their active session.
 
-#### **4. Manage User Profile**
+   #### **4. Manage User Profile**
 
-Let users update personal details such as name, phone number, address, preferences (e.g., language, currency), and saved information.
+   Let users update personal details such as name, phone number, address, preferences (e.g., language, currency), and saved information.
 
-#### **5. Deactivate or Reactivate Account**
+   #### **5. Deactivate or Reactivate Account**
 
-Provide the ability to disable or enable user account.
+   Provide the ability to disable or enable user account.
 
 
 ### **Flight Search & Booking**
 
-#### **1. Search for Flights**
+   #### **1. Search for Flights**
 
-Customers/Guests can search flights based on location, travel dates, passenger count, and trip type.
+   Customers/Guests can search flights based on location, travel dates, passenger count, and trip type.
 
-#### **2. Apply Flight Filters**
+   #### **2. Apply Flight Filters**
 
-Filter search results by price, stops, airlines, travel duration, time, or cabin class.
+   Filter search results by price, stops, airlines, travel duration, time, or cabin class.
 
-#### **3. View Flight Details**
+   #### **3. View Flight Details**
 
-Show full information about flights including stops, baggage, fare rules, and timings.
+   Show full information about flights including stops, baggage, fare rules, and timings.
 
-#### **4. Verify Flight Price**
+   #### **4. Verify Flight Price**
 
-Confirm final fare before proceeding with booking.
+   Confirm final fare before proceeding with booking.
 
-#### **5. Book a Flight**
+   #### **5. Book a Flight**
 
-Complete a flight reservation by selecting desired itinerary and providing traveler details.
+   Complete a flight reservation by selecting desired itinerary and providing traveler details.
 
-#### **6. Manage Flight Bookings**
+   #### **6. Manage Flight Bookings**
 
-Allow users(customers) to view or modify their flight bookings as allowed by provider policies.
+   Allow users(customers) to view or modify their flight bookings as allowed by provider policies.
 
 
 ### **Hotel Search & Booking**
 
-#### **1. Search for Hotels**
+   #### **1. Search for Hotels**
 
-Users can search available hotels by city, hotel name, dates, number of guests, or rooms.
+   Users can search available hotels by city, hotel name, dates, number of guests, or rooms.
 
-#### **2. Apply Hotel Filters**
+   #### **2. Apply Hotel Filters**
 
-Narrow results using filters such as price range, rating, amenities, location, or room type.
+   Narrow results using filters such as price range, rating, amenities, location, or room type.
 
-#### **3. View Hotel Details**
+   #### **3. View Hotel Details**
 
-Provide photos, descriptions, policies, amenities, available room details, pricing, cancellation rules, ratings, and reviews.
+   Provide photos, descriptions, policies, amenities, available room details, pricing, cancellation rules, ratings, and reviews.
 
-#### **4. Check Availability**
+   #### **4. Check Availability**
 
-Confirm that the selected room is still available before final booking.
+   Confirm that the selected room is still available before final booking.
 
-#### **5. Book a Hotel**
+   #### **5. Book a Hotel**
 
-Allow users(customers)/guests to complete full hotel reservations.
+   Allow users(customers)/guests to complete full hotel reservations.
 
-#### **6. Manage Hotel Bookings**
+   #### **6. Manage Hotel Bookings**
 
-Enable users(customers) to view and edit hotel reservations when possible.
+   Enable users(customers) to view and edit hotel reservations when possible.
 
-#### **7. Cancel Hotel Booking**
+   #### **7. Cancel Hotel Booking**
 
-Users(customers) can cancel their hotel booking depending on cancellation rules.
+   Users(customers) can cancel their hotel booking depending on cancellation rules.
 
 
 ### **Payment Processing**
 
-#### **1. Initiate Payment**
+   #### **1. Initiate Payment**
 
-Start the payment process for a flight or hotel booking based on the selected payment method (e.g., Stripe, PayPal).
+   Start the payment process for a flight or hotel booking based on the selected payment method (e.g., Stripe, PayPal).
 
-#### **2. Complete Payment**
+   #### **2. Complete Payment**
 
-Redirect users(customers)/guests to finalize payment.
+   Redirect users(customers)/guests to finalize payment.
 
-#### **3. Payment Confirmation**
+   #### **3. Payment Confirmation**
 
-Notify users(customers)/guests when payment is successfully completed.
+   Notify users(customers)/guests when payment is successfully completed.
 
-#### **4. Payment Failure Handling**
+   #### **4. Payment Failure Handling**
 
-Inform the user(customer)/guest if the payment failed, expired, or was canceled.
+   Inform the user(customer)/guest if the payment failed, expired, or was canceled.
 
-#### **5. Request Refund**
+   #### **5. Request Refund**
 
-Enable users(customers) to submit refund requests when eligible.
+   Enable users(customers) to submit refund requests when eligible.
 
 
 ### **Booking Management**
 
-#### **1. View All Bookings**
+   #### **1. View All Bookings**
 
-Users(customers) can view all active, completed, and cancelled bookings.
+   Users(customers) can view all active, completed, and cancelled bookings.
 
-#### **2. Get Booking Details**
+   #### **2. Get Booking Details**
 
-Users(customers) can display detailed information for each booking.
+   Users(customers) can display detailed information for each booking.
 
-#### **3. Cancel Reservations**
+   #### **3. Cancel Reservations**
 
-Allow users(customers) to cancel bookings based on provider rules.
+   Allow users(customers) to cancel bookings based on provider rules.
 
-#### **4. Booking Modification**
+   #### **4. Booking Modification**
 
-Support modifications like adding traveler info, changing dates, or adding additional services.
+   Support modifications like adding traveler info, changing dates, or adding additional services.
 
 
 ### **Notifications**
 
-#### **1. Booking Confirmation Notifications**
+   #### **1. Booking Confirmation Notifications**
 
-Send confirmation notifications via email or SMS after booking for users(customers)/guests.
+   Send confirmation notifications via email or SMS after booking for users(customers)/guests.
 
-#### **2. Payment Status Notifications**
+   #### **2. Payment Status Notifications**
 
-Notify users(customers)/guests about successful or failed transactions.
+   Notify users(customers)/guests about successful or failed transactions.
 
-#### **3. Promotional Notifications**
+   #### **3. Promotional Notifications**
 
-Send offers or deals based on user(customer) preference.
+   Send offers or deals based on user(customer) preference.
 
-#### **4. Opt-In / Opt-Out Preferences**
+   #### **4. Opt-In / Opt-Out Preferences**
 
-Allow users(customers) to subscribe or unsubscribe from notifications.
+   Allow users(customers) to subscribe or unsubscribe from notifications.
 
 
 ### **Customer Management**
 
-#### **1. Manage Preferred Payment Method**
+   #### **1. Manage Preferred Payment Method**
 
-Customers can set and update their preferred payment type.
+   Customers can set and update their preferred payment type.
 
-#### **2. View Booking History**
+   #### **2. View Booking History**
 
-Display complete history of previous flights and hotels.
+   Display complete history of previous flights and hotels.
 
-#### **3. Submit Ratings & Reviews**
+   #### **3. Submit Ratings & Reviews**
 
-Customers can leave ratings and reviews for hotel after their stay.
+   Customers can leave ratings and reviews for hotel after their stay.
 
-#### **4. Access Customer Support**
+   #### **4. Access Customer Support**
 
-Allow customers to request assistance, open tickets, or use chat support.
+   Allow customers to request assistance, open tickets, or use chat support.
 
-#### **5. Save Preferred Flight/Hotel**
+   #### **5. Save Preferred Flight/Hotel**
 
-Customers can save their preferred flight, hotel.
+   Customers can save their preferred flight, hotel.
 
 
 ### **Reporting & Dashboards (Admin Only)**
 
-#### **1. Manage Platform Users**
+   #### **1. Manage Platform Users**
 
-Admins can manage customer accounts.
+   Admins can manage customer accounts.
 
-#### **2. Monitor Bookings Activity**
+   #### **2. Monitor Bookings Activity**
 
-Admins can monitor flight and hotel booking trends and performance.
+   Admins can monitor flight and hotel booking trends and performance.
 
-#### **3. Generate Reports**
+   #### **3. Generate Reports**
 
-Generate daily/monthly reports for bookings, payments, customer interactions and more.
+   Generate daily/monthly reports for bookings, payments, customer interactions and more.
 
-#### **4. View System Usage Analytics**
+   #### **4. View System Usage Analytics**
 
-Admins can view system usage statistics and trends in the dashboard.
+   Admins can view system usage statistics and trends in the dashboard.
 
 
 ### **Customer Support Operations**
 
-#### **1. Booking Lookup for Support Team**
+   #### **1. Booking Lookup for Support Team**
 
-Support agents can search for any booking to assist customers.
+   Support agents can search for any booking to assist customers.
 
-#### **2. Handle Disputes**
+   #### **2. Handle Disputes**
 
-Resolve issues related to payments, cancellations, or booking errors.
+   Resolve issues related to payments, cancellations, or booking errors.
 
-#### **3. Handle Customer Complaints**
+   #### **3. Handle Customer Complaints**
 
-Support agents can handle customer complaints and resolve issues.
+   Support agents can handle customer complaints and resolve issues.
+
