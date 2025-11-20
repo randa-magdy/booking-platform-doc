@@ -3,7 +3,7 @@
 ## Content List
 
 1. [Vision](#vision)
-2. [Features and Functionalities for the System](#features-and-functionalities)
+2. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
 3. [Use Case Model for the System](#use-case-model-for-the-system)  
    3.1. [Actors](#actors)  
    3.2. [Use Cases](#use-cases)  
@@ -12,13 +12,17 @@
 
 ## Vision  
 
-The booking platform is designed to provide travelers with a seamless and intuitive experience for planning their trips. Users can effortlessly search for hotels and flights, compare options with ease, and complete bookings quickly and without complications. The platform also enables customers to manage their reservations, take advantage of exclusive deals, and enjoy reliable, secure payment processing tailored to their travel needs.
+The booking platform is designed to provide travelers with a seamless and intuitive experience when planning their trips. Users can easily search for hotels and flights, compare available options, and complete their bookings quickly and without complications. The platform also allows customers to manage their reservations, access exclusive deals, and benefit from secure and reliable payment processing tailored to their travel needs.
+
+The system integrates directly with **Amadeus APIs** to retrieve real-time flight schedules, fares, hotel availability, room details, and to process booking operations securely.
+
+Additionally, customers enjoy secure payments, booking management, and notifications throughout their travel journey.
 
 ---
 
 ## Features and Functionalities for the System 
 
-The detailed list of system features and functionalities is available in a separate document.  
+The detailed list of system features and functionalities is available in a separate document:  
 Please refer to [Features and Functionalities Document](./features-documentation.md) for more details.
 
 ---
@@ -29,73 +33,89 @@ Please refer to [Features and Functionalities Document](./features-documentation
 
 | **Actor**                                                        | **Description**                                                                        | **Responsibilities**                                                                                                                                                                                                                                                                                         |
 | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Customer (Guest / User)**                                      | End-user of the platform who books hotels or flights. Can be a traveler or local user. | - Search and book hotels/flights<br>- Manage bookings (view, modify, cancel)<br>- Make payments and request refunds<br>- Submit ratings/reviews<br>- Manage personal profile, preferences, and account settings                                                                                              |
-| **Hotel Supplier**                                               | Hotel owner/manager who provides room inventory and manages hotel-related services.    | - Manage hotel property listings, room types, amenities, images, pricing<br>- Update availability, promotions, discounts<br>- Handle booking confirmations, modifications, and cancellations<br>- Manage settlement reports and financial reconciliation      |
-| **Airline Supplier**                                             | Airline company providing flight schedules, fares, and seat inventory.                 | - Provide flight schedules, seat availability, and fares<br>- Handle booking confirmations, modifications, and cancellations<br>- Update flight status (delays, cancellations)<br>- Manage settlement and reconciliation                       |
-| **Payment Provider (PayPal, Visa, Mastercard, Apple Pay, etc.)** | External service provider that processes customer payments.                            | - Handle payment authorization, capture, settlement, and refunds<br>- Provide transaction receipts and status updates<br>- Support fraud detection and dispute management<br>- Enable multi-currency and various payment methods                                                                             |
+| **Customer (Guest / User)**                                      | End-user of the platform who books hotels or flights. Can be a traveler or local user. | - Search and book hotels/flights<br>- Complete bookings<br>- Manage existing bookings (view, modify, cancel)<br>- Make payments and request refunds<br>- Submit ratings/reviews<br>- Manage personal profile, preferences, and account settings                                                                                              |
+| **Amadeus Provider (External System)** | The core external API provider for flights & hotels. | - Provide flight schedules, fares, availability<br>- Provide hotel availability, room offers, and rates<br>- Create flight orders (PNR), hotel bookings<br>- Return booking status, cancellation rules & policies |
+| **Payment Provider (PayPal, Stripe, etc.)** | External service provider that processes customer payments.                            | - Handle payment authorization, capture, settlement, and refunds<br>- Provide transaction receipts and status updates<br>- Support fraud detection and dispute management                                                                             |
 | **Administrator (Platform Admin)**                               | Internal role managing overall system operations and compliance.                       | - Manage customers, suppliers, and internal users<br>- Oversee listings, disputes, promotions, and refunds<br>- Ensure compliance with licenses, policies, and legal requirements<br>- Monitor financial reports and fraud prevention<br>- Generate dashboards and analytics reports                         |
-| **Customer Service**                                             | Support role assisting customers and suppliers with issues.                            | - Help customers with booking, payment, cancellation, and refund issues<br>- Support suppliers with registration, listing setup, availability, pricing<br>- Resolve disputes between customers and suppliers<br>- Provide live chat, email, and phone support<br>- Escalate complex issues to administrators |
+| **Customer Service**                                             |  Support team assisting users.                        | - Resolve customer issues<br>- Handle cancellation/refund inquiries<br>- Assist with booking problems<br>- Escalate technical issues |
 
 ---
 
 ### `Main use cases` 
-- **User Registration & Authentication**: 
-   - Create User Account
-   - Login
-   - Logout
-   - Forget Password
-   - Get User Profile
-   - Update user profile
-   - Enable or Disable account
-   - Verify Account [Email or SMS]
-   - Social Media authentication
+### **1. User Registration & Authentication**: 
+   * Create User Account
+   * Login
+   * Logout
+   * Forget Password
+   * Get User Profile
+   * Update user profile
+   * Enable / Disable account
+   * Verify Account [Email or SMS]
+   * Social Login
      
- - **Search & Filter**: 
-   - Search Flights
-   - Search Hotels
-   - Filter Flights
-   - Filter Hotels
-   - Hotel Details
-   - Flight Details
-         
- - **Booking**: 
-    - Book Hotel
-    - Book Flight
-    - Get Booking Details
-    - Cancel Booking
-    - Get Booking History
-    - SMS or Email Confirmation booking [Notification]
-      
- - **Notification**: 
-    - Send Email or SMS confirmation
-    - Push notification [Emails] for Offers
-    - Subscribe to notification
-  
- - **Customer Management**: 
-    - Preferred Payment Setting
-    - Address Management
-    - Flight/hotel booking History
-    - Rating/Review
-    - Customer support [Chat]
+### **2. Search & Filter (Amadeus)**:
+   #### **Flights**
+   * Search flights (Amadeus Flight Offers Search API)
+   * Get flight offer details
+   * Filter by stops, airlines, durations, price range
+   * View fare rules & baggage info (from Amadeus)
+   
+   #### **Hotels**
+   * Search hotels (Hotel Search API)
+   * List available room offers
+   * Get hotel details (amenities, images, rating)
+   * Filter by price, category, amenities, location
+   * Get room rate details with cancellation rules
 
- - **Payment Integration**: 
-    - Payment Integration With third Party
-    - View Payment History
-    - Generate Payment Recipt
-    - Auditing Payment Integration
-    - Payment Verification
+         
+ ### **3. Booking (Amadeus Order Management)**: 
+   #### **Flight Booking**
+   
+   * Create flight order (PNR creation)
+   * Confirm booking
+   * Retrieve booking details
+   * Cancel flight order (if supported by airline)
+   * Get ticketing details (if applicable)
+   
+   #### **Hotel Booking**
       
- - **Dashboard & Reporting [System]**: 
-   - Count Customers
-   - Count Active Customers
-   - Daily count Flight/hotel Booking
-   - Total count Order Flight/hotel
-   - Daily Cancelled Booking Flight/hotel
-   - Total Cancelled Booking Flight/hotel
-   - Daily amount of transactions
-   - Total amount of transactions
-   - Generate Daily Transactions Report
-   - Generate Monthly Transactions Report
+   * Create hotel booking (Hotel Booking API)
+   * Retrieve booking
+   * Cancel booking
+   * View cancellation policy & penalties
+   
+   #### **Booking Management**
+   
+   * Booking summary
+   * Booking history
+   * PDF or email confirmation
+      
+ ### **4. Notification System**: 
+    * Send Email or SMS confirmation
+    * Booking updates
+    * Offers & promotions
+    * Opt-in/opt-out notification management
+  
+ ### **5. Customer Management**: 
+    * Preferred Payment Setting
+    * Flight/hotel booking History
+    * Rating/Review
+    * Customer support [Chat]
+
+ ### **6. Payment Integration**: 
+    * Payment Integration With third Party
+    * View Payment History
+    * Generate Payment Recipt
+    * Auditing Payment Integration
+    * Payment Verification
+      
+ ### **7. Dashboard & Reporting [System]**: 
+   * Count Customers
+   * Count Active Customers
+   * Daily/Monthly hotel & flight bookings
+   * Canceled bookings statistics
+   * Daily/Total amount of transactions
+   * Generate Daily/Monthly Transactions Report
 
 ### `Use Case Diagram` 
 
