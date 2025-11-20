@@ -110,8 +110,7 @@ Please refer to [Features and Functionalities Document](./features-documentation
  * Payment Verification
       
  ### **7. Dashboard & Reporting [System]**: 
- * Count Customers
- * Count Active Customers
+ * Total customers
  * Daily/Monthly hotel & flight bookings
  * Canceled bookings statistics
  * Daily/Total amount of transactions
