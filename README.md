@@ -5,8 +5,8 @@
 1. [Vision](#vision)
 2. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
 3. [Use Case Model for the System](#use-case-model-for-the-system)  
-   3.1. [Actors](#actors)  
-   3.2. [Use Cases](#use-cases)  
+   3.1. [Actors](#actors-of-the-system)  
+   3.2. [Main use cases](#main-use-cases)  
    3.3. [Use Case Diagram](#use-case-diagram)
 ---
 
@@ -91,31 +91,31 @@ Please refer to [Features and Functionalities Document](./features-documentation
    * PDF or email confirmation
       
  ### **4. Notification System**: 
-    * Send Email or SMS confirmation
-    * Booking updates
-    * Offers & promotions
-    * Opt-in/opt-out notification management
+ * Send Email or SMS confirmation
+ * Booking updates
+ * Offers & promotions
+ * Opt-in/opt-out notification management
   
  ### **5. Customer Management**: 
-    * Preferred Payment Setting
-    * Flight/hotel booking History
-    * Rating/Review
-    * Customer support [Chat]
+ * Preferred Payment Setting
+ * Flight/hotel booking History
+ * Rating/Review
+ * Customer support [Chat]
 
  ### **6. Payment Integration**: 
-    * Payment Integration With third Party
-    * View Payment History
-    * Generate Payment Recipt
-    * Auditing Payment Integration
-    * Payment Verification
+ * Payment Integration With third Party
+ * View Payment History
+ * Generate Payment Recipt
+ * Auditing Payment Integration
+ * Payment Verification
       
  ### **7. Dashboard & Reporting [System]**: 
-   * Count Customers
-   * Count Active Customers
-   * Daily/Monthly hotel & flight bookings
-   * Canceled bookings statistics
-   * Daily/Total amount of transactions
-   * Generate Daily/Monthly Transactions Report
+ * Count Customers
+ * Count Active Customers
+ * Daily/Monthly hotel & flight bookings
+ * Canceled bookings statistics
+ * Daily/Total amount of transactions
+ * Generate Daily/Monthly Transactions Report
 
 ### `Use Case Diagram` 
 
