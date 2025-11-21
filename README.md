@@ -23,7 +23,7 @@ Additionally, customers enjoy secure payments, booking management, and notificat
 ## Features and Functionalities for the System 
 
 The detailed list of system features and functionalities is available in a separate document:  
-Please refer to [Features and Functionalities Document](./features-documentation.md) for more details.
+Please refer to [Features and Functionalities Document](./features-functions-doc.md) for more details.
 
 ---
 
