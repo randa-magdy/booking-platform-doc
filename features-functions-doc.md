@@ -5,6 +5,19 @@ It describes how users(customers/guests) interact with the system at a business 
 
 ---
 
+## **Table of Contents**
+1. [User Registration & Authentication](#user-registration--authentication)
+2. [Flight Search & Booking](#flight-search--booking)
+3. [Hotel Search & Booking](#hotel-search--booking)
+4. [Payment Processing](#payment-processing)
+5. [Booking Management](#booking-management)
+6. [Notifications](#notifications)
+7. [Customer Management](#customer-management)
+8. [Reporting & Dashboards (Admin Only)](#reporting--dashboards--admin-only)
+9. [Customer Support Operations](#customer-support-operations)
+
+---
+
 ## **User Registration & Authentication**
 
 #### **1. Create User Account** : 
