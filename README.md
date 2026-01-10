@@ -8,6 +8,7 @@
    3.1. [Actors](#actors-of-the-system)  
    3.2. [Main use cases](#main-use-cases)  
    3.3. [Use Case Diagram](#use-case-diagram)
+4. [System Architecture](#system-architecture)
 ---
 
 ## Vision  
@@ -136,4 +137,11 @@ Please refer to [Features and Functionalities Document](./features-functions-doc
     classDef actor fill:#f6d6ff,stroke:#7a3ea0,stroke-width:2px
     classDef external fill:#d7f5ff,stroke:#1b7899,stroke-width:2px
 ```
+---
+
+## System Architecture
+
+This diagram illustrates the high-level architecture of the booking platform, showing how clients interact with the system through the API Gateway and how core services such as search, booking, payment, and notifications communicate using asynchronous messaging. It also highlights integrations with external providers, caching, databases, logging, and auditing components to ensure scalability, resilience, and observability.
+
+![System Architecture](system-architecture.png)
 
