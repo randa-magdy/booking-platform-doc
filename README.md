@@ -4,11 +4,12 @@
 
 1. [Vision](#vision)
 2. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
-3. [Use Case Model for the System](#use-case-model-for-the-system)  
+3. [Non-Functional Requirements](#non-functional-requirements)
+4. [Use Case Model for the System](#use-case-model-for-the-system)  
    3.1. [Actors](#actors-of-the-system)  
    3.2. [Main use cases](#main-use-cases)  
    3.3. [Use Case Diagram](#use-case-diagram)
-4. [System Architecture](#system-architecture)
+5. [System Architecture](#system-architecture)
 ---
 
 ## Vision  
