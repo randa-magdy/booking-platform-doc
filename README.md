@@ -5,11 +5,12 @@
 1. [Vision](#vision)
 2. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
 3. [Non-Functional Requirements](#non-functional-requirements)
-4. [Use Case Model for the System](#use-case-model-for-the-system)  
+4. [Assumptions and Constraints](#assumptions-and-constraints)
+5. [Use Case Model for the System](#use-case-model-for-the-system)  
    3.1. [Actors](#actors-of-the-system)  
    3.2. [Main use cases](#main-use-cases)  
    3.3. [Use Case Diagram](#use-case-diagram)
-5. [System Architecture](#system-architecture)
+6. [System Architecture](#system-architecture)
 ---
 
 ## Vision  
@@ -68,6 +69,14 @@ This section defines the quality attributes required to operate the booking plat
 
 ---
 
+## Assumptions and Constraints
+
+* The system relies on third-party providers for real-time travel data and payment processing
+* Network availability is required for booking and payment operations
+* The platform is deployed in a cloud-based environment to support scalability and availability
+* Data consistency is maintained through transactional processing and asynchronous messaging
+
+---
 
 ## Use Case Model for the System 
 
