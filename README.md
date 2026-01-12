@@ -28,6 +28,46 @@ Please refer to [Features and Functionalities Document](./features-functions-doc
 
 ---
 
+## Non-Functional Requirements
+
+This section defines the quality attributes required to operate the booking platform reliably at scale.
+
+### Scalability
+
+* Horizontal scaling supported via **stateless NestJS modules**
+* Asynchronous workloads handled using **RabbitMQ**
+* Redis used to reduce load on Amadeus APIs
+* Read replicas for PostgreSQL to scale read operations
+
+### Availability & Reliability
+
+* Target availability: **99.9%**
+* Graceful degradation when external providers are unavailable
+* Retry mechanisms and **DLQ** for message failures
+* Idempotent booking and payment operations
+
+### Performance
+
+* Flight/Hotel search response time < **2 seconds**
+* Cached search results using Redis
+* Asynchronous notifications and reporting
+
+### Security
+
+* OAuth2 / OIDC via **Keycloak**
+* PCI-sensitive data handled only by payment providers
+* Secure secrets via AWS environment configuration
+* HTTPS enforced via Nginx
+
+### Observability
+
+* Centralized logging via **ELK Stack**
+* Audit trails for booking & payment operations
+* Metrics and alerts for failures and queue backlogs
+
+---
+
+
 ## Use Case Model for the System 
 
 ### `Actors of the System` 
