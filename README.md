@@ -1,4 +1,7 @@
-# Booking (Hotel/Flight) Platform
+# Booking Platform System Documentation
+
+This document provides a comprehensive overview of the Booking Platform, a web-based system for managing hotel and flight reservations. It covers the system’s vision, architecture, core modules, external integrations, functional and non-functional requirements, use cases, and system interaction. The purpose of this document is to serve as a reference for developers, architects, stakeholders, and reviewers to understand the structure, functionality, and design considerations of the platform.
+
 
 ## Content List
 
