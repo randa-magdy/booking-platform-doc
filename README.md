@@ -87,6 +87,8 @@ At a high level:
 **Caching:** Redis  
 **Monitoring & Logging:** ELK Stack (Elasticsearch, Filebeat, Kibana)  
 **Reverse Proxy:** Nginx  
+**Containerization:** Docker
+**Local Orchestration:** Docker Compose
 **Hosting/Infrastructure:** AWS
 
 
@@ -146,6 +148,8 @@ This section defines the quality attributes required to operate the booking plat
 * Asynchronous workloads handled using **RabbitMQ**
 * Redis used to reduce load on Amadeus APIs
 * Read replicas for PostgreSQL to scale read operations
+* Horizontal scaling via replicated containers
+* Stateless services suitable for container orchestration
 
 ### Availability & Reliability
 
@@ -153,6 +157,9 @@ This section defines the quality attributes required to operate the booking plat
 * Graceful degradation when external providers are unavailable
 * Retry mechanisms and **DLQ** for message failures
 * Idempotent booking and payment operations
+* Container restart policies
+* Health checks
+* Isolation of failures per container
 
 ### Performance
 
@@ -166,6 +173,8 @@ This section defines the quality attributes required to operate the booking plat
 * PCI-sensitive data handled only by payment providers
 * Secure secrets via AWS environment configuration
 * HTTPS enforced via Nginx
+* Environment variables & secrets management
+* No credentials baked into images
 
 ### Observability
 
@@ -183,6 +192,10 @@ This section defines the quality attributes required to operate the booking plat
 * Network availability is required for booking and payment operations.
 * The platform is deployed in a cloud-based environment to support scalability and availability.
 * Data consistency is maintained through transactional processing and asynchronous messaging.
+* Docker Engine is available on all deployment environments
+* Docker Compose is used for local development
+* Container images are built via CI/CD
+* External services (Amadeus, Stripe, PayPal) are not containerized
 
 ---
 
@@ -296,11 +309,4 @@ This section defines the quality attributes required to operate the booking plat
     classDef actor fill:#f6d6ff,stroke:#7a3ea0,stroke-width:2px
     classDef external fill:#d7f5ff,stroke:#1b7899,stroke-width:2px
 ```
----
-
-## System Architecture
-
-This diagram illustrates the high-level architecture of the booking platform, showing how clients interact with the system through the API Gateway and how core services such as search, booking, payment, and notifications communicate using asynchronous messaging. It also highlights integrations with external providers, caching, databases, logging, and auditing components to ensure scalability, resilience, and observability.
-
-![System Architecture](system-architecture.png)
 
