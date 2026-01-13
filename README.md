@@ -4,21 +4,22 @@
 
 1. [Vision](#vision)
 2. [System Overview](#system-overview)
-    2.1. [System Description](#system-description)
-    2.2. [System Scope](#system-scope)
-    2.3. [Out of Scope](#out-of-scope)
-    2.3. [System Actors](#system-actors)
-    2.4. [High-Level Architecture Overview](#high-level-architecture-overview)
-    2.5. [Core System Modules](#core-system-modules)
-    2.6. [External Integrations](#external-integrations)
+   - [System Description](#system-description)
+   - [System Scope](#system-scope)
+   - [Out of Scope](#out-of-scope)
+   - [System Actors](#system-actors)
+   - [High-Level Architecture Overview](#high-level-architecture-overview)
+   - [Core System Modules](#core-system-modules)
+   - [External Integrations](#external-integrations)
 3. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
 4. [Non-Functional Requirements](#non-functional-requirements)
 5. [Assumptions and Constraints](#assumptions-and-constraints)
-6. [Use Case Model for the System](#use-case-model-for-the-system)  
-   6.1. [Actors](#actors-of-the-system)  
-   6.2. [Main use cases](#main-use-cases)  
-   6.3. [Use Case Diagram](#use-case-diagram)
+6. [Use Case Model for the System](#use-case-model-for-the-system)
+   - [Actors](#actors-of-the-system)
+   - [Main Use Cases](#main-use-cases)
+   - [Use Case Diagram](#use-case-diagram)
 7. [System Architecture](#system-architecture)
+
 ---
 
 ## Vision  
