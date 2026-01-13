@@ -3,14 +3,22 @@
 ## Content List
 
 1. [Vision](#vision)
-2. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
-3. [Non-Functional Requirements](#non-functional-requirements)
-4. [Assumptions and Constraints](#assumptions-and-constraints)
-5. [Use Case Model for the System](#use-case-model-for-the-system)  
-   3.1. [Actors](#actors-of-the-system)  
-   3.2. [Main use cases](#main-use-cases)  
-   3.3. [Use Case Diagram](#use-case-diagram)
-6. [System Architecture](#system-architecture)
+2. [System Overview](#system-overview)
+   2.1. [System Description](#system-description)
+   2.2. [System Scope](#system-scope)
+   2.3. [Out of Scope](#out-of-scope)
+   2.3. [System Actors](#system-actors)
+   2.4. [High-Level Architecture Overview](#high-level-architecture-overview)
+   2.5. [Core System Modules](#core-system-modules)
+   2.6. [External Integrations](#external-integrations)
+3. [Features and Functionalities for the System](#features-and-functionalities-for-the-system)
+4. [Non-Functional Requirements](#non-functional-requirements)
+5. [Assumptions and Constraints](#assumptions-and-constraints)
+6. [Use Case Model for the System](#use-case-model-for-the-system)  
+   6.1. [Actors](#actors-of-the-system)  
+   6.2. [Main use cases](#main-use-cases)  
+   6.3. [Use Case Diagram](#use-case-diagram)
+7. [System Architecture](#system-architecture)
 ---
 
 ## Vision  
@@ -20,6 +28,100 @@ The booking platform is designed to provide travelers with a seamless and intuit
 The system integrates directly with **Amadeus APIs** to retrieve real-time flight schedules, fares, hotel availability, room details, and to process booking operations securely.
 
 Additionally, customers enjoy secure payments, booking management, and notifications throughout their travel journey.
+
+---
+
+## System Overview
+
+### System Description
+
+The Booking Platform is a web-based travel management system that enables users to search, compare, and book hotels and flights through a unified and centralized application. The system provides end-to-end booking capabilities, from search and availability retrieval to payment processing and reservation management.
+
+The platform is designed to handle real-time data, support high concurrency, and ensure reliability across all booking operations.
+
+### System Scope
+
+The system covers the complete lifecycle of hotel and flight bookings, including:
+
+* Searching hotels and flights based on user-defined criteria
+* Displaying real-time availability, pricing, and details
+* Creating and managing bookings
+* Secure payment processing
+* Booking cancellation and refund handling
+* User notifications related to booking status and transactions
+* Administrative management of system data and configurations
+
+### Out of Scope
+
+The following features are currently outside the scope of the system:
+
+* Loyalty and reward programs
+* Travel insurance services
+* Manual or offline booking operations
+
+### System Actors
+
+The primary actors interacting with the system are:
+
+* **Guest Users**: Users who browse hotels and flights without authentication.
+* **Registered Users**: Users who can create, manage, cancel, and view bookings.
+* **Customer Service**: Internal support agents who assist customers with booking issues, cancellations, refunds, and general inquiries.
+* **Administrators**: Users responsible for managing system configurations, hotels, flights, pricing, bookings, and operational oversight.
+* **External Systems**: Third-party services that provide flight and hotel data, authentication, payment processing, and notification delivery.
+
+### High-Level Architecture Overview
+
+The platform follows a **modular monolith architecture with microservice-ready boundaries**. Core business domains such as **Flights** and **Hotels** are isolated into independent modules that can be extracted into standalone microservices as the system scales.
+
+At a high level:
+
+* The backend is implemented using **NestJS**
+* **PostgreSQL** is used as the primary relational database
+* **RabbitMQ** enables asynchronous and event-driven communication
+* **Keycloak** manages authentication and authorization
+* **Amadeus** is used as an external provider for real-time flight and hotel data
+* **Redis** is used for caching and session management
+* **Stripe** and **PayPal** are used as external providers for payment processing
+* The **ELK Stack** (Elasticsearch, Filebeat, Kibana) is used for centralized logging and monitoring
+* **Nginx** is used as a reverse proxy
+* **AWS** is used for hosting, scaling, and infrastructure management
+
+### Core System Modules
+
+The system is composed of the following major modules:
+
+#### User & Access
+- **Authentication Module** – Manages user identity, roles, and access control.
+- **Admin Module** – Provides administrative capabilities for system management, including user, supplier, and system configuration management.
+
+#### Booking & Search
+- **Search Module** – Provides unified search functionality across hotels and flights.
+- **Hotel Module** – Handles hotel search, availability retrieval, room offers, and booking operations.
+- **Flight Module** – Manages flight schedules, fares, availability, and booking operations.
+- **Booking Module** – Controls the complete booking lifecycle for hotels and flights, including reservation creation, modification, and cancellation.
+
+#### Payments & Transactions
+- **Payment Module** – Processes and validates payment transactions securely, integrating with external providers such as Stripe and PayPal.
+- **Transaction Module** – Manages the financial transaction lifecycle, including authorization, capture, settlement, and refunds, independently of booking logic.
+
+#### Notifications & Communication
+- **Notification Module** – Sends booking and payment-related notifications via **email, SMS, or in-app messages**. Responsibilities include:
+  - Booking confirmations (flight/hotel) with details and PDF attachments
+  - Updates for booking changes, cancellations, or payment status
+  - Promotional offers and notifications
+  - Managing user subscription preferences (opt-in/opt-out)
+
+#### Monitoring & Audit
+- **Audit Module** – Maintains audit trails for critical system operations, including bookings, payments, and system changes.
+
+### External Integrations
+
+The system relies on several external services to provide real-time data, secure operations, and reliable communication. Key integrations include:
+
+- **Flight and Hotel Provider APIs (Amadeus)** – Retrieves real-time flight schedules, fares, hotel availability, room details, and handles booking operations securely.
+- **Authentication Provider (Keycloak)** – Manages user authentication, roles, access control, and supports OAuth2/OpenID Connect standards.
+- **Payment Gateways (Stripe, PayPal, etc.)** – Processes payment transactions, including authorization, capture, refunds, and fraud detection.
+- **Notification Services (Email/SMS Providers, e.g., SendGrid)** – Sends booking confirmations, updates, and promotional notifications reliably via email, SMS, or in-app messages.
 
 ---
 
@@ -139,25 +241,26 @@ This section defines the quality attributes required to operate the booking plat
    * Booking summary
    * Booking history
    * PDF or email confirmation
-      
- ### **4. Notification System**: 
+
+
+ ### **4. Payment Integration**: 
+ * Payment Integration With third Party
+ * View Payment History
+ * Generate Payment Receipt
+ * Auditing Payment Integration
+ * Payment Verification
+
+ ### **5. Notification System**: 
  * Send Email or SMS confirmation
  * Booking updates
  * Offers & promotions
  * Opt-in/opt-out notification management
   
- ### **5. Customer Management**: 
+ ### **6. Customer Management**: 
  * Preferred Payment Setting
  * Flight/hotel booking History
  * Rating/Review
  * Customer support [Chat]
-
- ### **6. Payment Integration**: 
- * Payment Integration With third Party
- * View Payment History
- * Generate Payment Recipt
- * Auditing Payment Integration
- * Payment Verification
       
  ### **7. Dashboard & Reporting [System]**: 
  * Total customers
