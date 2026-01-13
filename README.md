@@ -1,6 +1,6 @@
 # Booking Platform System Documentation
 
-This document provides a comprehensive overview of the Booking Platform, a web-based system for managing hotel and flight reservations. It covers the system’s vision, architecture, core modules, external integrations, functional and non-functional requirements, use cases, and system interaction. The purpose of this document is to serve as a reference for developers, architects, stakeholders, and reviewers to understand the structure, functionality, and design considerations of the platform.
+This document provides a comprehensive overview of the Booking Platform, a web-based system for managing hotel and flight reservations. It covers the system’s vision, architecture, core modules, external integrations, functional and non-functional requirements and use cases. The purpose of this document is to serve as a reference for developers, architects, stakeholders, and reviewers to understand the structure, functionality, and design considerations of the platform.
 
 
 ## Content List
@@ -79,16 +79,16 @@ The platform follows a **modular monolith architecture with microservice-ready b
 
 At a high level:
 
-* The backend is implemented using **NestJS**
-* **PostgreSQL** is used as the primary relational database
-* **RabbitMQ** enables asynchronous and event-driven communication
-* **Keycloak** manages authentication and authorization
-* **Amadeus** is used as an external provider for real-time flight and hotel data
-* **Redis** is used for caching and session management
-* **Stripe** and **PayPal** are used as external providers for payment processing
-* The **ELK Stack** (Elasticsearch, Filebeat, Kibana) is used for centralized logging and monitoring
-* **Nginx** is used as a reverse proxy
-* **AWS** is used for hosting, scaling, and infrastructure management
+**Backend:** NestJS  
+**Database:** PostgreSQL  
+**Messaging:** RabbitMQ  
+**Authentication:** Keycloak  
+**External Providers:** Amadeus (flight/hotel), Stripe/PayPal (payments)  
+**Caching:** Redis  
+**Monitoring & Logging:** ELK Stack (Elasticsearch, Filebeat, Kibana)  
+**Reverse Proxy:** Nginx  
+**Hosting/Infrastructure:** AWS
+
 
 ### Core System Modules
 
@@ -177,10 +177,12 @@ This section defines the quality attributes required to operate the booking plat
 
 ## Assumptions and Constraints
 
-* The system relies on third-party providers for real-time travel data and payment processing
-* Network availability is required for booking and payment operations
-* The platform is deployed in a cloud-based environment to support scalability and availability
-* Data consistency is maintained through transactional processing and asynchronous messaging
+* The system relies on third-party providers for core operations:
+  - **Amadeus** for real-time flight and hotel search, availability checks, pricing, detailed offers, and booking operations.
+  - **Payment Providers** (e.g., **Stripe**, **PayPal**) for secure payment processing.
+* Network availability is required for booking and payment operations.
+* The platform is deployed in a cloud-based environment to support scalability and availability.
+* Data consistency is maintained through transactional processing and asynchronous messaging.
 
 ---
 
@@ -198,7 +200,7 @@ This section defines the quality attributes required to operate the booking plat
 
 ---
 
-### `Main use cases` 
+### `Main Use Cases` 
 ### **1. User Registration & Authentication**: 
    * Create User Account
    * Login
@@ -248,21 +250,21 @@ This section defines the quality attributes required to operate the booking plat
 
 
  ### **4. Payment Integration**: 
- * Payment Integration With third Party
+ * Payment Integration With Third Party
  * View Payment History
  * Generate Payment Receipt
  * Auditing Payment Integration
  * Payment Verification
 
  ### **5. Notification System**: 
- * Send Email or SMS confirmation
+ * Send Email / SMS or in-app messages
  * Booking updates
  * Offers & promotions
  * Opt-in/opt-out notification management
   
  ### **6. Customer Management**: 
  * Preferred Payment Setting
- * Flight/hotel booking History
+ * Flight/Hotel booking History
  * Rating/Review
  * Customer support [Chat]
       
